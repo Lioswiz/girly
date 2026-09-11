@@ -1,0 +1,8 @@
+{
+  "_comment": "Copy to data/smtp.json and fill in your provider details. Env vars SMTP_HOST/PORT/USER/PASS/FROM override this file. Tip: use a sender domain you control (a gmail.com From relayed through third-party SMTP gets silently dropped by Gmail's SPF/DMARC checks).",
+  "host": "smtp-relay.brevo.com",
+  "port": 587,
+  "user": "your-login",
+  "password": "your-smtp-key",
+  "from": "girly@yourdomain.com"
+}

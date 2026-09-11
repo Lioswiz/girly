@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Girly 🌸 · Cycle Tracker</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/girly.css"/>
+</head>
+<body>
+<main class="page">
+
+  <!-- Cycle hub -->
+  <section class="card glow-card stack gap-xs center" style="align-items:center">
+    <div class="ring-wrap">
+      <svg viewBox="0 0 160 160" aria-hidden="true">
+        <circle class="ring-bg" cx="80" cy="80" fill="transparent" r="68" stroke="currentColor" stroke-width="9"/>
+        <circle class="ring-fg" id="cycle-ring" cx="80" cy="80" fill="transparent" r="68"
+                stroke="currentColor" stroke-width="9" stroke-linecap="round"
+                stroke-dasharray="427" stroke-dashoffset="427"/>
+      </svg>
+      <div class="ring-center">
+        <span class="ring-badge"><span class="material-symbols-outlined filled" style="font-size:18px">spa</span></span>
+        <span class="t-headline-lg" id="cycle-day" style="font-weight:700">Day —</span>
+        <span class="t-label-sm muted">of <span id="cycle-length">—</span>-day cycle</span>
+      </div>
+    </div>
+
+    <div class="stack gap-xs" style="align-items:center">
+      <span class="pill pill-lilac" id="phase-pill">
+        <span class="material-symbols-outlined filled" style="font-size:15px">bedtime</span>
+        <span id="phase-label">Loading…</span>
+      </span>
+      <h2 class="t-headline-md" style="color:var(--primary); margin:.25rem 0 0" id="next-period">—</h2>
+      <p class="t-body-sm muted" id="phase-tip" style="max-width:300px; margin:0">…</p>
+    </div>
+
+    <div class="grid-2" style="margin-top:var(--sp-md)">
+      <button class="btn btn-primary" id="btn-period-modal" type="button">
+        <span class="material-symbols-outlined" style="font-size:18px">water_drop</span>
+        <span>+ Log Period</span>
+      </button>
+      <button class="btn btn-soft" id="btn-symptom-quick" type="button">
+        <span class="material-symbols-outlined" style="font-size:18px">edit_note</span>
+        <span>+ Log Symptoms</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Stat cards -->
+  <div class="grid-3" id="stat-cards">
+    <div class="stat-card">
+      <div class="stat-label" style="color:var(--primary)">
+        <span class="material-symbols-outlined" style="font-size:16px">sync</span><span>Cycle</span>
+      </div>
+      <span class="stat-value" id="stat-cycle">—</span>
+      <span class="stat-hint" id="stat-cycle-hint">—</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label" style="color:var(--primary)">
+        <span class="material-symbols-outlined" style="font-size:16px">water_drop</span><span>Duration</span>
+      </div>
+      <span class="stat-value" id="stat-duration">—</span>
+      <span class="stat-hint">User set 3–7 range</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label" style="color:var(--secondary)">
+        <span class="material-symbols-outlined" style="font-size:16px">egg_alt</span><span>Ovulation</span>
+      </div>
+      <span class="stat-value" id="stat-ovulation">—</span>
+      <span class="stat-hint">Algorithmic estimate</span>
+    </div>
+  </div>
+
+  <!-- Calendar -->
+  <section class="card">
+    <div class="cal-header">
+      <div class="row" style="gap:8px">
+        <span class="material-symbols-outlined" style="color:var(--primary); font-size:20px">calendar_month</span>
+        <h3 class="t-headline-sm" id="cal-title">—</h3>
+      </div>
+      <div class="row" style="gap:4px">
+        <button class="icon-btn" id="cal-prev" aria-label="Previous month" type="button" style="width:36px;height:36px">
+          <span class="material-symbols-outlined" style="font-size:20px">chevron_left</span>
+        </button>
+        <button class="icon-btn" id="cal-next" aria-label="Next month" type="button" style="width:36px;height:36px">
+          <span class="material-symbols-outlined" style="font-size:20px">chevron_right</span>
+        </button>
+      </div>
+    </div>
+    <div class="cal-grid" id="cal-dow"></div>
+    <div class="cal-grid" id="cal-days" style="padding-block:8px"></div>
+    <div class="legend-row" style="margin-top:var(--sp-md)">
+      <span class="legend-item"><span class="dot dot-primary"></span>Logged Period</span>
+      <span class="legend-item"><span class="dot dot-predicted"></span>Predicted (±2d)</span>
+      <span class="legend-item"><span class="dot dot-fertile"></span>Fertile Window</span>
+      <span class="legend-item"><span class="dot dot-ovulation"></span>Ovulation</span>
+    </div>
+  </section>
+
+  <!-- Wellness tip -->
+  <section class="card row" style="align-items:flex-start; gap:var(--sp-sm); padding:var(--sp-md)">
+    <div style="width:80px; height:80px; border-radius:var(--r-md); flex-shrink:0; background:linear-gradient(135deg, var(--primary-fixed), var(--secondary-fixed)); display:flex; align-items:center; justify-content:center">
+      <span class="material-symbols-outlined filled" style="font-size:36px; color:var(--primary)">local_cafe</span>
+    </div>
+    <div style="min-width:0">
+      <div class="row gap-xs" style="color:var(--tertiary)">
+        <span class="material-symbols-outlined filled" style="font-size:16px">auto_awesome</span>
+        <span class="t-label-sm" style="font-weight:700">Girly Cycle Tip</span>
+      </div>
+      <p class="t-headline-sm" id="tip-title" style="margin:2px 0 0">…</p>
+      <p class="t-body-sm muted" id="tip-body" style="margin:4px 0 0">…</p>
+    </div>
+  </section>
+
+  <!-- Daily check-in -->
+  <section class="card-flat row-between" style="gap:var(--sp-sm)">
+    <div class="row" style="gap:var(--sp-sm); min-width:0">
+      <div style="width:48px; height:48px; border-radius:var(--r-sm); flex-shrink:0; background:linear-gradient(135deg, var(--secondary-fixed), var(--tertiary-fixed)); display:flex; align-items:center; justify-content:center">
+        <span class="material-symbols-outlined filled" style="font-size:24px; color:var(--secondary)">spa</span>
+      </div>
+      <div style="min-width:0">
+        <span class="t-label-md" style="display:block; font-weight:700">Daily Wellness Check-In</span>
+        <span class="t-body-sm muted" style="display:block">How are you feeling today?</span>
+      </div>
+    </div>
+    <button class="btn btn-secondary" id="btn-checkin" style="min-height:36px; padding:.375rem .875rem">Check In</button>
+  </section>
+
+  <p class="notice">
+    <span class="material-symbols-outlined" style="font-size:16px">info</span>
+    Girly gives estimates based on learned cycle patterns and is not medical advice.
+  </p>
+</main>
+
+<!-- Quick log sheet: period flow -->
+<div class="sheet-backdrop" id="period-sheet">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="row-between" style="margin-bottom:var(--sp-sm)">
+      <h4 class="t-headline-sm" style="font-weight:700">Log Today's Flow</h4>
+      <button class="icon-btn" data-close="period-sheet" style="width:32px;height:32px" aria-label="Close" type="button">
+        <span class="material-symbols-outlined" style="font-size:20px">close</span>
+      </button>
+    </div>
+    <p class="t-body-sm muted" style="margin:0 0 var(--sp-md)">Select your current flow level for today's check-in.</p>
+    <div class="grid-2" style="grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:var(--sp-lg)" id="flow-options">
+      <button class="flow-option" type="button" data-flow="spotting"><span class="material-symbols-outlined" style="font-size:20px">water_drop</span>Spotting</button>
+      <button class="flow-option" type="button" data-flow="light"><span class="material-symbols-outlined" style="font-size:20px">water_drop</span>Light</button>
+      <button class="flow-option" type="button" data-flow="medium"><span class="material-symbols-outlined" style="font-size:20px">water_drop</span>Medium</button>
+      <button class="flow-option" type="button" data-flow="heavy"><span class="material-symbols-outlined" style="font-size:20px">water_drop</span>Heavy</button>
+    </div>
+    <button class="btn btn-primary btn-block" id="btn-save-flow">Save Log</button>
+  </div>
+</div>
+
+<!-- Quick log sheet: symptoms & mood -->
+<div class="sheet-backdrop" id="symptom-sheet">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="row-between" style="margin-bottom:var(--sp-sm)">
+      <h4 class="t-headline-sm" style="font-weight:700">Log Today's Symptoms</h4>
+      <button class="icon-btn" data-close="symptom-sheet" style="width:32px;height:32px" aria-label="Close" type="button">
+        <span class="material-symbols-outlined" style="font-size:20px">close</span>
+      </button>
+    </div>
+    <p class="t-body-sm muted" style="margin:0 0 var(--sp-sm)">Tap anything you're feeling today — all of it is normal to note.</p>
+
+    <div class="t-label-md muted" style="margin-bottom:6px">Mood</div>
+    <div class="chip-grid" id="mood-chips" style="margin-bottom:var(--sp-md)"></div>
+
+    <div class="t-label-md muted" style="margin-bottom:6px">Symptoms</div>
+    <div class="chip-grid" id="symptom-chips" style="margin-bottom:var(--sp-md)"></div>
+
+    <div class="field" style="margin-bottom:var(--sp-md)">
+      <label for="log-note">Note (private)</label>
+      <input class="input" id="log-note" placeholder="Anything you'd like to remember…"/>
+    </div>
+
+    <button class="btn btn-primary btn-block" id="btn-save-symptoms">Save Log</button>
+  </div>
+</div>
+
+<div class="toast" role="status"></div>
+<script src="js/api.js"></script>
+<script src="js/tracker.js"></script>
+</body>
+</html>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;min-height:100%;}body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"primary-fixed-dim":"#ffb1c0","on-surface":"#1b1c1a","error":"#ba1a1a","error-container":"#ffdad6","tertiary-fixed":"#ffd7f4","surface":"#fcf9f6","inverse-primary":"#ffb1c0","secondary-container":"#d0b0fe","on-primary-fixed":"#3f0016","on-error-container":"#93000a","on-tertiary-container":"#fffbff","tertiary-container":"#996291","inverse-on-surface":"#f3f0ed","on-tertiary-fixed":"#340732","on-secondary":"#ffffff","on-error":"#ffffff","primary":"#a03553","primary-container":"#c04e6b","on-tertiary-fixed-variant":"#663561","tertiary":"#7e4a77","surface-container":"#f0edea","on-primary-fixed-variant":"#841f3e","surface-variant":"#e5e2df","secondary-fixed":"#eddcff","on-surface-variant":"#564245","inverse-surface":"#31302f","surface-dim":"#dcdad7","tertiary-fixed-dim":"#f3b2e6","on-secondary-container":"#5b3e84","secondary-fixed-dim":"#d7baff","on-secondary-fixed-variant":"#55387d","on-secondary-fixed":"#27064f","outline":"#897175","surface-container-lowest":"#ffffff","primary-fixed":"#ffd9df","surface-container-low":"#f6f3f0","on-tertiary":"#ffffff","secondary":"#6d5097","surface-tint":"#a33855","on-primary-container":"#fffbff","background":"#fcf9f6","on-background":"#1b1c1a","outline-variant":"#dcc0c3","surface-container-highest":"#e5e2df","on-primary":"#ffffff","surface-container-high":"#eae8e5","surface-bright":"#fcf9f6"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-xs":"0.25rem","gutter":"1rem","margin":"1.5rem","margin-mobile":"1.25rem","gutter-mobile":"0.75rem","space-md":"1rem","space-xl":"2.25rem","space-lg":"1.5rem","space-sm":"0.5rem"},"fontFamily":{"body-md":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"display-lg":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"display-lg-mobile":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"]},"fontSize":{"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"500"}],"display-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-sm":["18px",{"lineHeight":"26px","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"headline-md":["22px",{"lineHeight":"30px","fontWeight":"600"}],"display-lg-mobile":["32px",{"lineHeight":"40px","letterSpacing":"-0.01em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col min-h-screen pt-safe pb-safe selection:bg-primary-fixed selection:text-on-primary-fixed"><main class="flex flex-col relative w-full min-h-full bg-surface"><div class="flex flex-col w-full pb-10">
+<!-- Admin Header Bar -->
+<div class="px-margin-mobile pt-space-md pb-space-sm flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="relative w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-headline-sm flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">shield_person</span>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">admin@girly.app</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm">
+            Root Ops
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Session ID: <span class="font-mono">girly_adm_994f</span></p>
+</div>
+</div>
+<!-- Mode switch & refresh badge -->
+<div class="flex items-center gap-space-xs">
+<button aria-label="Toggle Night Mode" class="w-9 h-9 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center transition-transform active:scale-95 shadow-sm" id="themeToggleBtn">
+<span class="material-symbols-outlined text-[20px]">dark_mode</span>
+</button>
+<button aria-label="Reload Metrics" class="w-9 h-9 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center transition-transform active:rotate-180 duration-300 shadow-sm" onclick="window.location.reload()">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+</button>
+</div>
+</div>
+<div class="px-margin-mobile flex flex-col gap-space-md mt-space-sm">
+<!-- Zero-Knowledge Cryptographic Privacy Architecture Callout -->
+<div class="rounded-xl bg-gradient-to-br from-surface-container-lowest to-surface-container p-space-md shadow-sm relative overflow-hidden">
+<div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-primary-fixed-dim/20 blur-xl pointer-events-none"></div>
+<div class="flex items-start gap-space-sm relative z-10">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary flex-shrink-0 mt-0.5 shadow-sm">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5">
+<span class="font-label-lg text-label-lg text-primary">Zero-Knowledge Architecture</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm">E2EE</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            Cycle details, period dates, flow intensity, symptom notes, and LLM chatbot prompts are strictly encrypted client-side. Administrators cannot query, decrypt, or inspect individual health profiles under any circumstance.
+          </p>
+</div>
+</div>
+</div>
+<!-- Quick Stats Grid (2x2 Mobile Bento) -->
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="rounded-xl bg-surface-container-lowest p-space-md flex flex-col gap-1 shadow-sm relative">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm tracking-wider uppercase">Registered</span>
+<span class="material-symbols-outlined text-[18px] text-primary">group</span>
+</div>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-display-lg-mobile text-display-lg-mobile text-on-surface">1,420</span>
+<span class="font-label-sm text-label-sm text-primary">+12 today</span>
+</div>
+<div class="w-full bg-surface-container-high h-1 rounded-full overflow-hidden mt-1">
+<div class="bg-primary h-full w-[85%] rounded-full"></div>
+</div>
+</div>
+<div class="rounded-xl bg-surface-container-lowest p-space-md flex flex-col gap-1 shadow-sm relative">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm tracking-wider uppercase">Active Sessions</span>
+<span class="material-symbols-outlined text-[18px] text-secondary">wifi_tethering</span>
+</div>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-display-lg-mobile text-display-lg-mobile text-on-surface">389</span>
+<span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Valid HttpOnly cookies</span>
+</div>
+<div class="rounded-xl bg-surface-container-lowest p-space-md flex flex-col gap-1 shadow-sm">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm tracking-wider uppercase">Learn Mode</span>
+<span class="material-symbols-outlined text-[18px] text-tertiary">menu_book</span>
+</div>
+<span class="font-display-lg-mobile text-display-lg-mobile text-on-surface mt-1">412</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">29.0% of member base</span>
+</div>
+<div class="rounded-xl bg-surface-container-lowest p-space-md flex flex-col gap-1 shadow-sm">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm tracking-wider uppercase">Tracking Mode</span>
+<span class="material-symbols-outlined text-[18px] text-primary">favorite</span>
+</div>
+<span class="font-display-lg-mobile text-display-lg-mobile text-on-surface mt-1">1,008</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">71.0% logging rhythms</span>
+</div>
+</div>
+<!-- System Health & Daemon Services -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-tertiary text-[18px]">dns</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">System Health</span>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant">3/3 Healthy</span>
+</div>
+<div class="flex flex-col gap-2">
+<!-- Node 1: HTTP -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 flex-shrink-0"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Python stdlib HTTP Server</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Port 3000 • PID 41920</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant">
+            Running
+          </span>
+</div>
+<!-- Node 2: SMTP -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 flex-shrink-0"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">SMTP Mail Dispatcher</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Gmail App Password • TLS 587</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant">
+            Configured
+          </span>
+</div>
+<!-- Node 3: Gemini -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 flex-shrink-0"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Gemini LLM Provider</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">gemini-3.6-flash • Free Tier</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed">
+            Connected
+          </span>
+</div>
+</div>
+</div>
+<!-- Account Management Section -->
+<div class="flex flex-col gap-space-sm mt-1">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Member Directory</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Identity &amp; credential recovery management</p>
+</div>
+<span class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-primary-fixed text-on-primary-fixed" id="userCountBadge">
+          4 Accounts
+        </span>
+</div>
+<!-- Search & Filters -->
+<div class="flex flex-col gap-2">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full bg-surface-container-lowest text-on-surface font-body-md text-body-md pl-10 pr-4 py-2.5 rounded-xl shadow-sm outline-none placeholder:text-outline focus:bg-surface-container-low transition-colors" id="userSearchInput" placeholder="Search accounts by name or email..." type="text"/>
+</div>
+<!-- Filter Pill Carousel -->
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-label-sm font-label-sm">
+<button class="filter-btn px-3 py-1 rounded-full bg-primary text-on-primary shadow-sm flex-shrink-0 transition-all" data-filter="all">
+            All (4)
+          </button>
+<button class="filter-btn px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant flex-shrink-0 transition-all" data-filter="active">
+            Active Session (2)
+          </button>
+<button class="filter-btn px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant flex-shrink-0 transition-all" data-filter="tracking">
+            Tracking Mode (3)
+          </button>
+<button class="filter-btn px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant flex-shrink-0 transition-all" data-filter="learn">
+            Learn Mode (1)
+          </button>
+</div>
+</div>
+<!-- User List Cards -->
+<div class="flex flex-col gap-space-sm mt-1" id="userListContainer">
+<!-- User 1: Maya Lin -->
+<div class="user-card rounded-xl bg-surface-container-lowest p-space-md flex flex-col gap-space-sm shadow-sm" data-email="maya@example.com" data-mode="tracking" data-name="Maya Lin" data-status="active">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-start gap-2.5 min-w-0">
+<div class="w-9 h-9 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-label-lg flex-shrink-0">
+                ML
+              </div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Maya Lin</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Active
+                  </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">maya@example.com</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-primary-fixed-dim/40 text-on-primary-fixed-variant">Tracking Mode</span>
+<span class="font-body-sm text-body-sm text-outline">• Oct 12, 2024</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Action Buttons -->
+<div class="grid grid-cols-3 gap-1.5 pt-1">
+<button class="px-2 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" onclick="openPasswordResetModal('maya@example.com')">
+<span class="material-symbols-outlined text-[16px]">lock_reset</span>
+              Reset
+            </button>
+<button class="px-2 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" onclick="triggerRevokeSessions('maya@example.com')">
+<span class="material-symbols-outlined text-[16px]">logout</span>
+              Revoke
+            </button>
+<button class="px-2 py-1.5 rounded-lg bg-error-container text-on-error-container font-label-sm text-label-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" onclick="confirmDeleteUser('Maya Lin', 'maya@example.com')">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+              Delete
+            </button>
+</div>
+</div>
+<!-- User 2: Chloe Vance -->
+<div class="user-card rounded-xl bg-surface-container-lowest p-space-md flex flex-col gap-space-sm shadow-sm" data-email="chloe.v@example.com" data-mode="learn" data-name="Chloe Vance" data-status="active">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-start gap-2.5 min-w-0">
+<div class="w-9 h-9 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-label-lg flex-shrink-0">
+                CV
+              </div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Chloe Vance</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm">
+                    2 Sessions
+                  </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">chloe.v@example.com</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-secondary-fixed-dim/40 text-on-secondary-fixed-variant">Learn Mode</span>
+<span class="font-body-sm text-body-sm text-outline">• Oct 18, 2024</span>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-1.5 pt-1">
+<button class="px-2 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" onclick="openPasswordResetModal('chloe.v@example.com')">
+<span class="material-symbols-outlined text-[16px]">lock_reset</span>
+              Reset
+            </button>
+<button class="px-2 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" onclick="triggerRevokeSessions('chloe.v@example.com')">
+<span class="material-symbols-outlined text-[16px]">logout</span>
+              Revoke
+            </button>
+<button class="px-2 py-1.5 rounded-lg bg-error-container text-on-error-container font-label-sm text-label-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" onclick="confirmDeleteUser('Chloe Vance', 'chloe.v@example.com')">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+              Delete
+            </button>
+</div>
+</div>
+<!-- User 3: Sarah Jenkins -->
+<div class="user-card rounded-xl bg-surface-container-lowest p-space-md flex flex-col gap-space-sm shadow-sm" data-email="sarah.j@example.com" data-mode="tracking" data-name="Sarah Jenkins" data-status="idle">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-start gap-2.5 min-w-0">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-label-lg flex-shrink-0">
+                SJ
+              </div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Sarah Jenkins</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">
+                    Idle
+                  </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">sarah.j@example.com</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-primary-fixed-dim/40 text-on-primary-fixed-variant">Tracking Mode</span>
+<span class="font-body-sm text-body-sm text-outline">• Sep 29, 2024</span>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-1.5 pt-1">
+<button class="px-2 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" onclick="openPasswordResetModal('sarah.j@example.com')">
+<span class="material-symbols-outlined text-[16px]">lock_reset</span>
+              Reset
+            </button>
+<button class="px-2 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" onclick="triggerRevokeSessions('sarah.j@example.com')">
+<span class="material-symbols-outlined text-[16px]">logout</span>
+              Revoke
+            </button>
+<button class="px-2 py-1.5 rounded-lg bg-error-container text-on-error-container font-label-sm text-label-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" onclick="confirmDeleteUser('Sarah Jenkins', 'sarah.j@example.com')">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+              Delete
+            </button>
+</div>
+</div>
+<!-- User 4: Elena Rostova -->
+<div class="user-card rounded-xl bg-surface-container-lowest p-space-md flex flex-col gap-space-sm shadow-sm" data-email="elena.r@example.com" data-mode="tracking" data-name="Elena Rostova" data-status="active">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-start gap-2.5 min-w-0">
+<div class="w-9 h-9 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-label-lg flex-shrink-0">
+                ER
+              </div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Elena Rostova</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Active
+                  </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">elena.r@example.com</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-primary-fixed-dim/40 text-on-primary-fixed-variant">Tracking Mode</span>
+<span class="font-body-sm text-body-sm text-outline">• Oct 24, 2024</span>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-1.5 pt-1">
+<button class="px-2 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" onclick="openPasswordResetModal('elena.r@example.com')">
+<span class="material-symbols-outlined text-[16px]">lock_reset</span>
+              Reset
+            </button>
+<button class="px-2 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" onclick="triggerRevokeSessions('elena.r@example.com')">
+<span class="material-symbols-outlined text-[16px]">logout</span>
+              Revoke
+            </button>
+<button class="px-2 py-1.5 rounded-lg bg-error-container text-on-error-container font-label-sm text-label-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" onclick="confirmDeleteUser('Elena Rostova', 'elena.r@example.com')">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+              Delete
+            </button>
+</div>
+</div>
+</div>
+<!-- Empty State for Directory Search -->
+<div class="hidden rounded-xl bg-surface-container-lowest p-space-lg text-center flex-col items-center justify-center gap-2 shadow-sm" id="noUserResults">
+<span class="material-symbols-outlined text-outline text-[32px]">manage_search</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">No matching accounts</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Try searching another email address or clear active filter tabs.</p>
+</div>
+</div>
+<!-- Administrative Actions & CLI Snippets -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[20px]">terminal</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Emergency CLI Controls</span>
+</div>
+<div class="flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Manual Password Reset Generator:</span>
+<div class="bg-inverse-surface text-inverse-on-surface p-3 rounded-lg flex items-center justify-between font-mono text-[12px] overflow-x-auto shadow-inner">
+<code class="truncate select-all" id="cliSnippet">python3 reset_password.py user@girly.app newpass_88x</code>
+<button class="ml-2 px-2 py-1 bg-white/10 hover:bg-white/20 rounded text-white font-label-sm text-label-sm flex items-center gap-1 flex-shrink-0" onclick="copyCliCommand()">
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+            Copy
+          </button>
+</div>
+</div>
+<div class="pt-2 flex flex-col gap-2">
+<button class="w-full py-2.5 px-4 rounded-full bg-secondary text-on-secondary font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-sm active:scale-98 transition-transform" onclick="exportTelemetry()">
+<span class="material-symbols-outlined text-[18px]">download</span>
+          Export Anonymous Telemetry (Counts Only)
+        </button>
+<p class="font-body-sm text-body-sm text-center text-outline">
+          Strictly exports account metadata &amp; aggregates. Zero chat or period details are included.
+        </p>
+</div>
+</div>
+</div>
+<!-- Notification Toast Container -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-inverse-surface text-inverse-on-surface px-4 py-2.5 rounded-full font-label-md text-label-md shadow-xl flex items-center gap-2 pointer-events-none transition-all duration-300 opacity-0 translate-y-4" id="adminToast">
+<span class="material-symbols-outlined text-[18px] text-primary-fixed" id="toastIcon">check_circle</span>
+<span id="toastMessage">Action completed successfully</span>
+</div>
+<!-- Password Reset Modal Backdrop -->
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-margin-mobile" id="resetModal">
+<div class="w-full max-w-sm bg-surface-container-lowest rounded-xl p-space-lg shadow-xl flex flex-col gap-space-md animate-in fade-in zoom-in-95">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary-fixed text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">mail</span>
+</div>
+<div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Dispatch Password Reset</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Via SMTP Service</p>
+</div>
+</div>
+<button class="text-on-surface-variant" onclick="closePasswordResetModal()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Target Email</label>
+<input class="w-full bg-surface-container px-3 py-2 rounded-lg font-body-md text-body-md text-on-surface select-all outline-none" id="modalTargetEmail" readonly="" type="text"/>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        This dispatches an ephemeral one-time reset token with a 30-minute expiration window to the user's registered inbox.
+      </p>
+<div class="flex items-center justify-end gap-2 pt-1">
+<button class="px-4 py-2 rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md" onclick="closePasswordResetModal()">
+          Cancel
+        </button>
+<button class="px-4 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-sm active:scale-95 transition-transform flex items-center gap-1.5" onclick="dispatchSmtpReset()">
+<span class="material-symbols-outlined text-[16px]">send</span>
+          Send Token
+        </button>
+</div>
+</div>
+</div>
+<!-- Delete Confirmation Modal Backdrop -->
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-margin-mobile" id="deleteModal">
+<div class="w-full max-w-sm bg-surface-container-lowest rounded-xl p-space-lg shadow-xl flex flex-col gap-space-md">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">warning</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Permanently Delete Account?</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            This will purge the identity record for <strong class="text-on-surface" id="deleteTargetUser"></strong>. Encrypted client-vault keys will become unrecoverable.
+          </p>
+</div>
+</div>
+<div class="flex items-center justify-end gap-2 pt-2">
+<button class="px-4 py-2 rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md" onclick="closeDeleteModal()">
+          Cancel
+        </button>
+<button class="px-4 py-2 rounded-full bg-error text-on-error font-label-md text-label-md shadow-sm active:scale-95 transition-transform" onclick="executeAccountPurge()">
+          Delete Permanently
+        </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Toast Helper
+  function showToast(message, icon = 'check_circle') {
+    const toast = document.getElementById('adminToast');
+    const msg = document.getElementById('toastMessage');
+    const ico = document.getElementById('toastIcon');
+    if (!toast || !msg || !ico) return;
+    
+    msg.textContent = message;
+    ico.textContent = icon;
+    toast.classList.remove('opacity-0', 'translate-y-4');
+    toast.classList.add('opacity-100', 'translate-y-0');
+
+    setTimeout(() => {
+      toast.classList.remove('opacity-100', 'translate-y-0');
+      toast.classList.add('opacity-0', 'translate-y-4');
+    }, 2800);
+  }
+
+  // Dark Mode Toggle
+  const themeToggle = document.getElementById('themeToggleBtn');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      showToast(isDark ? 'Dark mode enabled' : 'Light mode restored', isDark ? 'dark_mode' : 'light_mode');
+    });
+  }
+
+  // Search & Filter state
+  let currentFilter = 'all';
+  const searchInput = document.getElementById('userSearchInput');
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const userCards = document.querySelectorAll('.user-card');
+  const noResults = document.getElementById('noUserResults');
+  const userBadge = document.getElementById('userCountBadge');
+
+  function updateDirectoryView() {
+    const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+    let visibleCount = 0;
+
+    userCards.forEach(card => {
+      const name = (card.getAttribute('data-name') || '').toLowerCase();
+      const email = (card.getAttribute('data-email') || '').toLowerCase();
+      const mode = card.getAttribute('data-mode') || '';
+      const status = card.getAttribute('data-status') || '';
+
+      const matchesSearch = !query || name.includes(query) || email.includes(query);
+      let matchesFilter = true;
+
+      if (currentFilter === 'active') {
+        matchesFilter = status === 'active';
+      } else if (currentFilter === 'tracking') {
+        matchesFilter = mode === 'tracking';
+      } else if (currentFilter === 'learn') {
+        matchesFilter = mode === 'learn';
+      }
+
+      if (matchesSearch && matchesFilter) {
+        card.classList.remove('hidden');
+        visibleCount++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+
+    if (noResults) {
+      if (visibleCount === 0) {
+        noResults.classList.remove('hidden');
+        noResults.classList.add('flex');
+      } else {
+        noResults.classList.add('hidden');
+        noResults.classList.remove('flex');
+      }
+    }
+
+    if (userBadge) {
+      userBadge.textContent = `${visibleCount} Account${visibleCount === 1 ? '' : 's'}`;
+    }
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', updateDirectoryView);
+  }
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterButtons.forEach(b => {
+        b.classList.remove('bg-primary', 'text-on-primary');
+        b.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+      });
+      btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+      btn.classList.add('bg-primary', 'text-on-primary');
+
+      currentFilter = btn.getAttribute('data-filter') || 'all';
+      updateDirectoryView();
+    });
+  });
+
+  // Password Reset Modal handlers
+  let activeResetEmail = '';
+  function openPasswordResetModal(email) {
+    activeResetEmail = email;
+    const targetInput = document.getElementById('modalTargetEmail');
+    if (targetInput) targetInput.value = email;
+    const modal = document.getElementById('resetModal');
+    if (modal) modal.classList.remove('hidden');
+  }
+
+  function closePasswordResetModal() {
+    const modal = document.getElementById('resetModal');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  function dispatchSmtpReset() {
+    closePasswordResetModal();
+    showToast(`Reset link dispatched via SMTP to ${activeResetEmail}`, 'send');
+  }
+
+  // Revoke Sessions Handler
+  function triggerRevokeSessions(email) {
+    showToast(`Revoked all active sessions for ${email}`, 'logout');
+  }
+
+  // Delete User Confirmation
+  let userToDelete = { name: '', email: '' };
+  function confirmDeleteUser(name, email) {
+    userToDelete = { name, email };
+    const label = document.getElementById('deleteTargetUser');
+    if (label) label.textContent = `${name} (${email})`;
+    const modal = document.getElementById('deleteModal');
+    if (modal) modal.classList.remove('hidden');
+  }
+
+  function closeDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  function executeAccountPurge() {
+    closeDeleteModal();
+    userCards.forEach(card => {
+      if (card.getAttribute('data-email') === userToDelete.email) {
+        card.remove();
+      }
+    });
+    showToast(`Account for ${userToDelete.name} deleted`, 'delete_forever');
+    updateDirectoryView();
+  }
+
+  // CLI copy helper
+  function copyCliCommand() {
+    const text = document.getElementById('cliSnippet')?.innerText || 'python3 reset_password.py';
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      showToast('CLI command copied to clipboard', 'content_copy');
+    }
+  }
+
+  // Telemetry Export handler
+  function exportTelemetry() {
+    const telemetry = {
+      timestamp: new Date().toISOString(),
+      registered_accounts: 1420,
+      active_sessions: 389,
+      modes: {
+        tracking_mode: 1008,
+        learn_mode: 412
+      },
+      privacy_audit: 'Client-side zero-knowledge verified. No cycle or symptom data included.'
+    };
+    const blob = new Blob([JSON.stringify(telemetry, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `girly_anonymous_telemetry_${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Anonymous counts exported', 'download');
+  }
+</script></main></body></html>

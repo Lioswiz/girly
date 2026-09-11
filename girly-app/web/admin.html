@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Girly 🌸 · Admin Console</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/girly.css"/>
+</head>
+<body>
+<main class="page" style="padding-top:1rem; gap:var(--sp-md)">
+
+  <!-- Admin header bar -->
+  <div class="row-between" style="gap:var(--sp-sm)">
+    <div class="row" style="gap:var(--sp-sm); min-width:0">
+      <div style="position:relative; width:40px; height:40px; border-radius:var(--r-full); background:var(--primary-fixed); display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:var(--shadow-rest)">
+        <span class="material-symbols-outlined filled" style="color:var(--primary); font-size:20px">shield_person</span>
+        <span style="position:absolute; bottom:0; right:0; width:10px; height:10px; background:var(--ok); border-radius:var(--r-full)"></span>
+      </div>
+      <div style="min-width:0">
+        <div class="row" style="gap:6px">
+          <span class="t-headline-sm" id="admin-email" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap">admin@girly.app</span>
+          <span class="pill pill-plum">Root Ops</span>
+        </div>
+        <p class="t-body-sm muted" style="margin:0">Session secured · HttpOnly cookie</p>
+      </div>
+    </div>
+    <div class="row" style="gap:var(--sp-xs)">
+      <button class="icon-btn" id="admin-theme" aria-label="Toggle Night Mode" type="button" style="background:var(--surface-container-high); width:36px; height:36px">
+        <span class="material-symbols-outlined" style="font-size:20px">dark_mode</span>
+      </button>
+      <button class="icon-btn" id="admin-refresh" aria-label="Reload Metrics" type="button" style="background:var(--surface-container-high); width:36px; height:36px">
+        <span class="material-symbols-outlined" style="font-size:20px">refresh</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Zero-knowledge callout -->
+  <div class="card row" style="align-items:flex-start; gap:var(--sp-sm); padding:var(--sp-md); background:linear-gradient(135deg, var(--surface-container-lowest), var(--surface-container)); position:relative; overflow:hidden">
+    <div style="position:absolute; right:-1.5rem; bottom:-1.5rem; width:6rem; height:6rem; border-radius:50%; background:color-mix(in srgb, var(--primary-fixed-dim) 20%, transparent); filter:blur(20px)"></div>
+    <div style="position:relative; width:32px; height:32px; border-radius:var(--r-full); background:var(--primary-fixed); color:var(--primary); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px">
+      <span class="material-symbols-outlined filled" style="font-size:18px">lock</span>
+    </div>
+    <div class="stack" style="gap:4px; position:relative">
+      <div class="row" style="gap:6px">
+        <span class="t-label-lg" style="color:var(--primary)">Zero-Knowledge Architecture</span>
+        <span style="padding:2px 6px; border-radius:var(--r-sm); background:var(--surface-container-highest); color:var(--on-surface-variant); font-size:11px; font-weight:600">LOCAL</span>
+      </div>
+      <p class="t-body-sm muted" style="margin:0">Cycle details, period dates, flow intensity, symptom notes, and assistant prompts stay in the local JSON store on this machine. Administrators manage identities only — never health profiles.</p>
+    </div>
+  </div>
+
+  <!-- Stats bento -->
+  <div class="grid-2" id="stats-grid">
+    <div class="stat-card" style="padding:var(--sp-md)">
+      <div class="row-between" style="color:var(--on-surface-variant)">
+        <span class="t-label-sm" style="text-transform:uppercase; letter-spacing:.06em">Registered</span>
+        <span class="material-symbols-outlined" style="font-size:18px; color:var(--primary)">group</span>
+      </div>
+      <div class="row" style="align-items:baseline; gap:4px; margin-top:4px">
+        <span class="t-display" id="stat-registered">—</span>
+      </div>
+      <div style="width:100%; height:4px; background:var(--surface-container-high); border-radius:var(--r-full); overflow:hidden; margin-top:4px">
+        <div style="height:100%; width:85%; background:var(--primary); border-radius:var(--r-full)"></div>
+      </div>
+    </div>
+    <div class="stat-card" style="padding:var(--sp-md)">
+      <div class="row-between" style="color:var(--on-surface-variant)">
+        <span class="t-label-sm" style="text-transform:uppercase; letter-spacing:.06em">Active Sessions</span>
+        <span class="material-symbols-outlined" style="font-size:18px; color:var(--secondary)">wifi_tethering</span>
+      </div>
+      <div class="row" style="align-items:baseline; gap:6px; margin-top:4px">
+        <span class="t-display" id="stat-sessions">—</span>
+        <span class="dot dot-ok" style="animation:pulse 2s infinite"></span>
+      </div>
+      <span class="t-body-sm muted">Valid HttpOnly cookies</span>
+    </div>
+    <div class="stat-card" style="padding:var(--sp-md)">
+      <div class="row-between" style="color:var(--on-surface-variant)">
+        <span class="t-label-sm" style="text-transform:uppercase; letter-spacing:.06em">Learn Mode</span>
+        <span class="material-symbols-outlined" style="font-size:18px; color:var(--tertiary)">menu_book</span>
+      </div>
+      <span class="t-display" id="stat-learn" style="margin-top:4px">—</span>
+      <span class="t-body-sm muted" id="stat-learn-pct">— of member base</span>
+    </div>
+    <div class="stat-card" style="padding:var(--sp-md)">
+      <div class="row-between" style="color:var(--on-surface-variant)">
+        <span class="t-label-sm" style="text-transform:uppercase; letter-spacing:.06em">Tracking Mode</span>
+        <span class="material-symbols-outlined" style="font-size:18px; color:var(--primary)">favorite</span>
+      </div>
+      <span class="t-display" id="stat-tracking" style="margin-top:4px">—</span>
+      <span class="t-body-sm muted" id="stat-tracking-pct">— logging rhythms</span>
+    </div>
+  </div>
+
+  <!-- System health -->
+  <div class="card stack gap-sm" style="padding:var(--sp-md)">
+    <div class="row-between">
+      <div class="row" style="gap:6px">
+        <span class="material-symbols-outlined" style="color:var(--tertiary); font-size:18px">dns</span>
+        <span class="t-headline-sm">System Health</span>
+      </div>
+      <span class="pill pill-neutral" id="health-badge">checking…</span>
+    </div>
+    <div class="stack" style="gap:8px" id="services-list"></div>
+  </div>
+
+  <!-- Member directory -->
+  <div class="stack gap-sm" style="margin-top:4px">
+    <div class="row-between">
+      <div>
+        <h2 class="t-headline-sm">Member Directory</h2>
+        <p class="t-body-sm muted">Identity &amp; credential recovery management</p>
+      </div>
+      <span class="pill pill-blush" id="user-count-badge">— Accounts</span>
+    </div>
+
+    <div class="field">
+      <div class="field-input-wrap">
+        <span class="material-symbols-outlined">search</span>
+        <input class="input with-icon" id="user-search" placeholder="Search accounts by name or email..." style="background:var(--surface-container-lowest); box-shadow:var(--shadow-rest)"/>
+      </div>
+    </div>
+
+    <div class="prompt-chips" id="filter-pills">
+      <button class="prompt-chip filter-btn" data-filter="all" type="button">All</button>
+      <button class="prompt-chip filter-btn" data-filter="active" type="button">Active Session</button>
+      <button class="prompt-chip filter-btn" data-filter="tracking" type="button">Tracking Mode</button>
+      <button class="prompt-chip filter-btn" data-filter="learn" type="button">Learn Mode</button>
+    </div>
+
+    <div class="stack gap-sm" id="user-list" style="margin-top:4px"></div>
+
+    <div class="card hidden center stack" id="no-user-results" style="align-items:center; gap:8px; padding:var(--sp-lg)">
+      <span class="material-symbols-outlined" style="color:var(--outline); font-size:32px">manage_search</span>
+      <span class="t-headline-sm">No matching accounts</span>
+      <p class="t-body-sm muted" style="margin:0">Try searching another email address or clear active filter tabs.</p>
+    </div>
+  </div>
+
+  <!-- Audit log -->
+  <div class="card stack gap-sm" style="padding:var(--sp-md)">
+    <div class="row-between">
+      <div class="row" style="gap:6px">
+        <span class="material-symbols-outlined" style="color:var(--tertiary); font-size:18px">receipt_long</span>
+        <span class="t-headline-sm">Admin Audit Log</span>
+      </div>
+      <span class="pill pill-neutral">Last 100 events</span>
+    </div>
+    <div class="stack" style="gap:6px; max-height:260px; overflow-y:auto" id="audit-list"></div>
+  </div>
+
+  <!-- CLI controls -->
+  <div class="card stack gap-sm" style="padding:var(--sp-md)">
+    <div class="row" style="gap:6px">
+      <span class="material-symbols-outlined" style="color:var(--primary); font-size:20px">terminal</span>
+      <span class="t-headline-sm">Emergency CLI Controls</span>
+    </div>
+    <span class="t-label-sm muted">Run the Go server with a fresh store:</span>
+    <div class="row-between" style="background:var(--inverse-surface); color:var(--inverse-on-surface); padding:12px; border-radius:var(--r-sm); font-family:ui-monospace,monospace; font-size:12px">
+      <code id="cli-snippet" style="overflow-x:auto; white-space:nowrap">rm data/girly.json &amp;&amp; ./run.sh</code>
+      <button class="btn" id="copy-cli" style="min-height:0; padding:4px 8px; background:rgba(255,255,255,.1); color:inherit; font-size:11px">
+        <span class="material-symbols-outlined" style="font-size:14px">content_copy</span> Copy
+      </button>
+    </div>
+    <button class="btn btn-secondary btn-block" id="export-telemetry" style="margin-top:8px; padding-block:.625rem">
+      <span class="material-symbols-outlined" style="font-size:18px">download</span>
+      Export Anonymous Telemetry (Counts Only)
+    </button>
+    <p class="t-body-sm center" style="color:var(--outline); margin:0">Strictly exports account metadata &amp; aggregates. Zero chat or period details are included.</p>
+  </div>
+</main>
+
+<!-- Password reset modal -->
+<div class="modal-backdrop" id="reset-modal">
+  <div class="modal stack gap-md">
+    <div class="row-between" style="align-items:flex-start">
+      <div class="row" style="gap:8px">
+        <div style="width:32px;height:32px;border-radius:var(--r-full);background:var(--primary-fixed);color:var(--primary);display:flex;align-items:center;justify-content:center">
+          <span class="material-symbols-outlined" style="font-size:18px">lock_reset</span>
+        </div>
+        <div>
+          <span class="t-headline-sm">Dispatch Password Reset</span>
+          <p class="t-body-sm muted">Temporary credential generator</p>
+        </div>
+      </div>
+      <button class="icon-btn" onclick="closeModal('reset-modal')" style="width:32px;height:32px" aria-label="Close" type="button">
+        <span class="material-symbols-outlined" style="font-size:20px">close</span>
+      </button>
+    </div>
+    <div class="field">
+      <label>Target Email</label>
+      <input class="input" id="reset-target-email" readonly style="background:var(--surface-container)"/>
+    </div>
+    <p class="t-body-sm muted" style="margin:0">A temporary password will be generated and all existing sessions for this account revoked. Share it with the member through a secure channel.</p>
+    <div class="row" style="justify-content:flex-end; gap:8px; padding-top:4px">
+      <button class="btn btn-ghost" onclick="closeModal('reset-modal')" style="min-height:38px">Cancel</button>
+      <button class="btn btn-primary" id="confirm-reset" style="min-height:38px">
+        <span class="material-symbols-outlined" style="font-size:16px">send</span> Generate &amp; Send
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete confirmation modal -->
+<div class="modal-backdrop" id="delete-modal">
+  <div class="modal stack gap-md">
+    <div class="row" style="align-items:flex-start; gap:12px">
+      <div style="width:40px;height:40px;border-radius:var(--r-full);background:var(--error-container);color:var(--on-error-container);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <span class="material-symbols-outlined" style="font-size:22px">warning</span>
+      </div>
+      <div>
+        <span class="t-headline-sm">Permanently Delete Account?</span>
+        <p class="t-body-sm muted" style="margin:4px 0 0">This will purge the identity record for <b id="delete-target"></b>. All cycle logs will become unrecoverable.</p>
+      </div>
+    </div>
+    <div class="row" style="justify-content:flex-end; gap:8px; padding-top:4px">
+      <button class="btn btn-ghost" onclick="closeModal('delete-modal')" style="min-height:38px">Cancel</button>
+      <button class="btn" id="confirm-delete" style="min-height:38px; background:var(--error); color:var(--on-error)">Delete Permanently</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" role="status"></div>
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
