@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Girly 🌸 · Cycle Assistant</title>
-  <link rel="icon" href="assets/logo.svg" type="image/svg+xml"/>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
@@ -34,6 +34,14 @@
 
   <!-- Chat stream -->
   <div class="chat-stream" id="chat-stream"></div>
+
+  <div class="row-between" style="padding-inline:4px">
+    <span class="t-label-sm muted">Previous conversation</span>
+    <button class="btn btn-ghost" id="clear-chat" type="button" style="min-height:32px;padding:.25rem .625rem">
+      <span class="material-symbols-outlined" style="font-size:16px">delete_sweep</span>
+      <span>Clear</span>
+    </button>
+  </div>
 
   <!-- Suggested prompts -->
   <div class="stack gap-xs" style="padding-top:var(--sp-xs)">

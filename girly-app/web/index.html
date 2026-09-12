@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Girly 🌸 · Create Your Private Account</title>
-  <link rel="icon" href="assets/logo.svg" type="image/svg+xml"/>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
@@ -18,18 +18,18 @@
   <header class="stack gap-sm center" style="padding-block:0.5rem 1rem">
     <div style="position:relative; width:fit-content; margin-inline:auto">
       <div style="position:absolute; inset:-6px; border-radius:1.25rem; background:var(--secondary-fixed); opacity:.7; filter:blur(12px)"></div>
-      <img src="assets/logo.svg" alt="Girly logo" style="position:relative; width:64px; height:64px; border-radius:1rem; box-shadow:var(--shadow-rest)"/>
+      <img src="assets/favicon.svg" alt="Girly logo" style="position:relative; width:64px; height:64px; border-radius:1rem; box-shadow:var(--shadow-rest)"/>
     </div>
     <span class="pill pill-lilac" style="align-self:center; text-transform:uppercase; letter-spacing:.06em">
       <span class="material-symbols-outlined filled" style="font-size:14px">spa</span>
       Private &amp; Reassuring
     </span>
-    <h1 class="t-headline-lg" id="form-title">Create Your Private Account</h1>
+    <h1 class="t-headline-lg" id="form-title">Welcome Back</h1>
     <p class="t-body-md muted" style="max-width:280px; margin:0 auto">A safe, gentle space to understand and track your rhythm.</p>
   </header>
 
   <!-- ================= REGISTER ================= -->
-  <form class="stack gap-lg" id="register-form">
+  <form class="stack gap-lg hidden" id="register-form">
 
     <!-- About you -->
     <section class="card stack gap-md">
@@ -50,7 +50,7 @@
         <label for="email">Email Address</label>
         <div class="field-input-wrap">
           <span class="material-symbols-outlined">mail</span>
-          <input class="input with-icon" id="email" name="email" placeholder="you@example.com" required type="email"/>
+          <input class="input with-icon" id="email" name="email" placeholder="name@example.com" required type="email"/>
         </div>
       </div>
 
@@ -58,11 +58,12 @@
         <label for="password">Create Password</label>
         <div class="field-input-wrap">
           <span class="material-symbols-outlined">lock</span>
-          <input class="input with-icon" id="password" name="password" placeholder="Minimum 8 characters" required minlength="8" type="password" style="padding-right:2.75rem"/>
+          <input class="input with-icon" id="password" name="password" placeholder="e.g. Bloom7!" required minlength="8" pattern="(?=.*[A-Za-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}" title="Use 8+ characters with a letter, number, and special character" type="password" style="padding-right:2.75rem"/>
           <button class="icon-btn" id="toggle-password" type="button" aria-label="Toggle password visibility" style="position:absolute; right:4px; width:36px; height:36px">
             <span class="material-symbols-outlined" id="eye-icon" style="font-size:20px">visibility</span>
           </button>
         </div>
+        <p class="t-label-sm muted" style="margin:4px 0 0">8+ characters, including a letter, number, and special character.</p>
       </div>
 
       <div class="field">
@@ -169,17 +170,6 @@
       </div>
     </section>
 
-    <!-- Privacy guarantee -->
-    <section class="card-flat row" style="align-items:flex-start; gap:var(--sp-sm)">
-      <div style="padding:8px; border-radius:var(--r-full); background:color-mix(in srgb, var(--tertiary) 10%, transparent); color:var(--tertiary); flex-shrink:0">
-        <span class="material-symbols-outlined" style="font-size:20px">enhanced_encryption</span>
-      </div>
-      <div>
-        <div class="t-label-md" style="font-weight:700">Zero-Knowledge Privacy Guarantee</div>
-        <p class="t-body-sm muted" style="margin:2px 0 0">🔒 Your cycle data stays on your own machine in a local JSON store. Never shared with third parties or advertisers.</p>
-      </div>
-    </section>
-
     <div class="stack gap-sm" style="margin-top:var(--sp-xs)">
       <p class="t-body-sm" id="form-error" style="color:var(--error); margin:0; text-align:center"></p>
       <button class="btn btn-primary btn-block" id="submitBtn" type="submit" style="padding-block:1rem">
@@ -194,7 +184,7 @@
   </form>
 
   <!-- ================= SIGN IN ================= -->
-  <form class="stack gap-md hidden" id="signin-form" style="max-width:380px; margin:0 auto; width:100%">
+  <form class="stack gap-md" id="signin-form" style="max-width:380px; margin:0 auto; width:100%">
     <section class="card stack gap-md">
       <div class="row gap-xs" style="color:var(--primary)">
         <span class="material-symbols-outlined" style="font-size:20px">lock_open</span>
@@ -211,7 +201,10 @@
         <label for="signin-password">Password</label>
         <div class="field-input-wrap">
           <span class="material-symbols-outlined">lock</span>
-          <input class="input with-icon" id="signin-password" required type="password" placeholder="Your password"/>
+          <input class="input with-icon" id="signin-password" required type="password" placeholder="Your password" style="padding-right:2.75rem"/>
+          <button class="icon-btn" id="toggle-signin-password" type="button" aria-label="Show password" title="Show password" style="position:absolute; right:4px; width:36px; height:36px">
+            <span class="material-symbols-outlined" id="signin-eye-icon" style="font-size:20px">visibility</span>
+          </button>
         </div>
       </div>
       <p class="t-body-sm" id="signin-error" style="color:var(--error); margin:0"></p>
@@ -224,10 +217,6 @@
         <button type="button" class="t-label-sm" id="show-register" style="color:var(--primary); font-weight:700; background:none; cursor:pointer; text-decoration:underline">Create an account</button>
       </div>
     </section>
-    <p class="notice">
-      <span class="material-symbols-outlined" style="font-size:14px">info</span>
-      Demo accounts: maya@example.com · password123 — admin@girly.app · admin123
-    </p>
   </form>
 </main>
 

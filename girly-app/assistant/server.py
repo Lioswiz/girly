@@ -13,11 +13,17 @@ Endpoints:
 """
 
 import json
+import os
 import random
 import re
+import urllib.error
+import urllib.parse
+import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 HOST, PORT = "127.0.0.1", 3000
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash").strip()
 
 # ---------------------------------------------------------------------------
 # Knowledge base: (keyword patterns, response builder)
@@ -49,6 +55,133 @@ def phase_intro(ctx):
     if phase == "luteal":
         return f"In your late-luteal stretch (around Day {day})"
     return "In Learn Mode, without cycle dates to go on"
+
+
+@topic("wash", "washing", "shower", "bath", "clean", "cleaning", "douche", "douching")
+def _(ctx):
+    return {
+        "reply": (
+            "For everyday menstrual and intimate hygiene, gently wash the vulva (the outside) with "
+            "lukewarm water and, if you like, a mild fragrance-free cleanser. The vagina cleans itself, "
+            "so douching and scented sprays are not needed and can irritate the natural balance. Pat dry "
+            "and change out of damp clothes when you can."
+        ),
+        "tips": [
+            "Wipe front to back after using the toilet",
+            "Choose breathable underwear and change it after sweating",
+            "Avoid scented pads, washes, sprays, and bath products on the vulva",
+        ],
+        "doctor": True,
+    }
+
+
+@topic("discharge", "odor", "smell", "itch", "itchy", "burning", "irritation", "irritated")
+def _(ctx):
+    return {
+        "reply": (
+            "Clear or white discharge can be a normal part of the cycle, and its amount and texture may "
+            "change around ovulation. A new strong or fishy odor, intense itching, burning, pain, sores, "
+            "or green, gray, or cottage-cheese-like discharge is worth checking with a clinician because "
+            "different causes need different treatment. Avoid douching or using leftover medication."
+        ),
+        "tips": [
+            "Use unscented products and keep the area dry and comfortable",
+            "Note when symptoms started and whether they follow a new product or sexual contact",
+            "Seek prompt care for pelvic pain, fever, sores, or pregnancy with unusual symptoms",
+        ],
+        "doctor": True,
+    }
+
+
+@topic("hiv", "aids", "antiretroviral", "viral load", "undetectable", "prep", "pep")
+def _(ctx):
+    return {
+        "reply": (
+            "HIV is a virus that can gradually affect the immune system if it is not treated; AIDS is the "
+            "most advanced stage of untreated HIV, not a separate way to catch it. HIV can be transmitted "
+            "through specific contact with infected blood, semen, vaginal fluids, or breast milk, but not by "
+            "hugging, sharing food, toilet seats, or casual contact. Testing is the only way to know your status. "
+            "Modern antiretroviral treatment can reduce HIV to an undetectable level, and undetectable HIV is "
+            "not sexually transmissible (U=U)."
+        ),
+        "tips": [
+            "Condoms, not sharing needles, and PrEP can reduce the chance of HIV transmission",
+            "PEP is emergency medicine that should be started as soon as possible, ideally within 24 hours and no later than 72 hours after a possible exposure",
+            "If you may have been exposed, contact a clinic or urgent-care service today for testing and PEP advice",
+        ],
+        "doctor": True,
+    }
+
+
+@topic("sex", "sexual", "condom", "contraception", "birth control", "sti", "std", "chlamydia", "gonorrhea")
+def _(ctx):
+    return {
+        "reply": (
+            "For sexual health, condoms and internal condoms help reduce STI and pregnancy risk when used "
+            "correctly every time, while other birth-control methods mainly prevent pregnancy. STI testing "
+            "is the only way to know your status, and many infections have no symptoms. A pharmacist, clinic, "
+            "or doctor can help you choose private, age-appropriate care."
+        ),
+        "tips": [
+            "Use a new condom for every act of vaginal, anal, or oral sex",
+            "Consider routine STI testing after a new partner or possible exposure",
+            "Ask urgently about emergency contraception or post-exposure care when timing matters",
+        ],
+        "doctor": True,
+    }
+
+
+@topic("pregnant", "pregnancy", "pregnancy test", "test positive", "missed period")
+def _(ctx):
+    return {
+        "reply": (
+            "A missed period can have many causes, including stress, illness, travel, medication, or pregnancy. "
+            "If pregnancy is possible, a home test is generally most useful after the missed period or about "
+            "two weeks after sex; follow its instructions and repeat it or contact a clinician if the result "
+            "is unclear. Seek urgent care for a positive test with severe one-sided pain, fainting, or heavy bleeding."
+        ),
+        "tips": [
+            "Use first-morning urine when testing early",
+            "Record the test date and result for a clinician if needed",
+            "Do not take new medicines or supplements for pregnancy without checking first",
+        ],
+        "doctor": True,
+    }
+
+
+@topic("fever", "faint", "fainted", "unbearable", "unmanageable", "emergency", "severe bleeding", "soaking")
+def _(ctx):
+    return {
+        "reply": (
+            "Please seek urgent medical help for severe or worsening pain, fainting, confusion, trouble breathing, "
+            "a high fever, possible pregnancy with pain or bleeding, or bleeding that soaks a pad or tampon every "
+            "hour for several hours. If you feel unsafe or seriously unwell, contact local emergency services now."
+        ),
+        "tips": [
+            "Ask someone you trust to stay with you if you feel faint or very unwell",
+            "Keep track of bleeding, pain, temperature, medicines, and when symptoms began",
+            "Do not drive yourself if you may faint",
+        ],
+        "doctor": True,
+    }
+
+
+@topic("pmdd", "depression", "depressed", "hopeless", "self harm", "suicidal", "panic")
+def _(ctx):
+    return {
+        "reply": (
+            "Severe mood symptoms that reliably appear before a period and interfere with daily life can be "
+            "more than ordinary PMS, including PMDD. You deserve support, not blame. A clinician can compare "
+            "symptoms across at least two cycles and discuss treatment. If you might hurt yourself, contact local "
+            "emergency services or a crisis line now and stay with someone you trust."
+        ),
+        "tips": [
+            "Track mood, sleep, and cycle dates daily for two cycles",
+            "Tell a trusted person what support would help today",
+            "Reduce pressure and prioritize food, water, rest, and safety",
+        ],
+        "doctor": True,
+    }
 
 
 @topic("cramp", "cramps", "ache", "aching", "pain", "painful", "hurts")
@@ -390,13 +523,64 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def respond(message, ctx):
-    for pattern, builder in KB:
-        if pattern.search(message):
-            result = builder(ctx)
+    if GEMINI_API_KEY:
+        result = ask_gemini(message, ctx)
+        if result is not None:
             return decorate(result, ctx)
+
+    generic_terms = {"ache", "aching", "pain", "painful", "hurts", "symptom", "symptoms"}
+    best = None
+    for order, (pattern, builder) in enumerate(KB):
+        match = pattern.search(message)
+        if not match:
+            continue
+        matched_text = match.group(0)
+        specific = matched_text.lower() not in generic_terms
+        score = (specific, len(matched_text.split()), len(matched_text), -order)
+        if best is None or score > best[0]:
+            best = (score, builder)
+
+    if best is not None:
+        result = best[1](ctx)
+        return decorate(result, ctx)
 
     result = {"reply": random.choice(FALLBACK_REPLIES), "tips": [], "doctor": False}
     return decorate(result, ctx)
+
+
+def ask_gemini(message, ctx):
+    """Ask Gemini a general question while keeping the local fallback available."""
+    prompt = (
+        "You are Girly, a warm and concise health education assistant. Answer the user's question "
+        "directly and accurately. Cover general health, menstrual health, sexual health, hygiene, "
+        "and everyday wellness. Do not diagnose, prescribe, or claim certainty. For urgent symptoms "
+        "or possible pregnancy, STI, HIV, self-harm, or abuse concerns, recommend prompt professional "
+        "help and mention emergency services when appropriate. Use plain language and avoid judgment. "
+        "Return only the answer text, without markdown headings or a disclaimer.\n\n"
+        f"Cycle context (use only when relevant): {json.dumps(ctx, ensure_ascii=False)}\n"
+        f"User question: {message}"
+    )
+    payload = json.dumps({
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {"temperature": 0.3, "maxOutputTokens": 700},
+    }).encode("utf-8")
+    query = urllib.parse.urlencode({"key": GEMINI_API_KEY})
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{urllib.parse.quote(GEMINI_MODEL)}:generateContent?{query}"
+    request = urllib.request.Request(
+        url,
+        data=payload,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            data = json.loads(response.read().decode("utf-8"))
+        text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
+        if not text:
+            return None
+        return {"reply": text, "tips": [], "doctor": False}
+    except (urllib.error.URLError, TimeoutError, KeyError, IndexError, TypeError, ValueError):
+        return None
 
 
 def decorate(result, ctx):

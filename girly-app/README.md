@@ -20,20 +20,21 @@ Then open **http://localhost:8080**.
 | App server | Go (stdlib) | 8080 | Serves the frontend, REST API, auth & sessions, cycle predictions, admin endpoints |
 | Companion | Python (stdlib) | 3000 | The in-app AI assistant: cycle-aware knowledge-base chat + health probe |
 
-## Demo accounts
+To enable general Gemini Flash answers, set `GEMINI_API_KEY` before starting the
+companion. The local health knowledge base remains available as a fallback.
 
-| Email | Password | Notes |
-|---|---|---|
-| `maya@example.com` | `password123` | Tracking mode, 3 cycles of history |
-| `chloe.v@example.com` | `password123` | Learn mode (no period yet) |
-| `admin@girly.app` | `admin123` | Root operator — admin console |
+```powershell
+$env:GEMINI_API_KEY = "your-key"
+$env:GEMINI_MODEL = "gemini-2.5-flash"
+py assistant/server.py
+```
 
 ## What's inside
 
 ```
 girly-app/
 ├── main.go              # entrypoint: routing + static serving
-├── store.go             # JSON persistence, models, demo seed
+├── store.go             # JSON persistence and models
 ├── auth.go              # PBKDF2-SHA256 password hashing, session tokens
 ├── handlers.go          # REST API (auth, logs, predictions, admin, chat proxy)
 ├── cycle.go             # cycle-day / phase / fertile-window prediction math

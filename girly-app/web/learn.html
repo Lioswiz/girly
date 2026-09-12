@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Girly 🌸 · Learn Mode</title>
-  <link rel="icon" href="assets/logo.svg" type="image/svg+xml"/>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
@@ -69,7 +69,6 @@
         <span class="material-symbols-outlined filled" style="color:var(--secondary); font-size:22px">auto_awesome</span>
         <span class="t-label-md" style="font-weight:700">Private Cycle Companion</span>
       </div>
-      <span class="pill" style="background:var(--surface-container-lowest); color:var(--secondary)">100% Anonymous</span>
     </div>
     <p class="t-body-sm muted" style="margin:0">Wondering if a symptom is normal, or feeling shy? Ask our caring, judgment-free guide anything.</p>
     <div class="row" style="gap:8px; margin-top:4px">
@@ -132,22 +131,22 @@
       <p class="t-body-sm muted">Your cycle isn't just the days you bleed—it's an entire 24–35 day rhythm guided by your body's superpowers.</p>
     </div>
     <div class="grid-2" style="margin-top:4px">
-      <div class="card-flat stack" style="gap:2px; padding:var(--sp-sm)">
+      <div class="card-flat stack phase-card" data-phase="menstrual" role="button" tabindex="0" style="gap:2px; padding:var(--sp-sm)">
         <div class="row" style="gap:6px"><span class="dot dot-primary"></span><span class="t-label-md" style="color:var(--primary); font-weight:700">1. Menstrual</span></div>
         <span class="t-label-sm" style="font-weight:700">Days 1–5</span>
         <span class="t-body-sm muted">Cozy rest, bleeding, low energy.</span>
       </div>
-      <div class="card-flat stack" style="gap:2px; padding:var(--sp-sm)">
+      <div class="card-flat stack phase-card" data-phase="follicular" role="button" tabindex="0" style="gap:2px; padding:var(--sp-sm)">
         <div class="row" style="gap:6px"><span class="dot" style="background:var(--secondary)"></span><span class="t-label-md" style="color:var(--secondary); font-weight:700">2. Follicular</span></div>
         <span class="t-label-sm" style="font-weight:700">Days 6–13</span>
         <span class="t-body-sm muted">Rising stamina, curiosity, fresh vibes.</span>
       </div>
-      <div class="card-flat stack" style="gap:2px; padding:var(--sp-sm)">
+      <div class="card-flat stack phase-card" data-phase="ovulatory" role="button" tabindex="0" style="gap:2px; padding:var(--sp-sm)">
         <div class="row" style="gap:6px"><span class="dot" style="background:var(--secondary-container)"></span><span class="t-label-md" style="color:var(--on-secondary-container); font-weight:700">3. Ovulatory</span></div>
         <span class="t-label-sm" style="font-weight:700">Day ~14</span>
         <span class="t-body-sm muted">Peak confidence, glowing, outgoing.</span>
       </div>
-      <div class="card-flat stack" style="gap:2px; padding:var(--sp-sm)">
+      <div class="card-flat stack phase-card" data-phase="luteal" role="button" tabindex="0" style="gap:2px; padding:var(--sp-sm)">
         <div class="row" style="gap:6px"><span class="dot" style="background:var(--tertiary)"></span><span class="t-label-md" style="color:var(--tertiary); font-weight:700">4. Luteal</span></div>
         <span class="t-label-sm" style="font-weight:700">Days 15–28</span>
         <span class="t-body-sm muted">Winding down, nest building, food cravings.</span>
@@ -293,6 +292,19 @@
     <p class="t-body-sm muted" style="font-style:italic; max-width:300px; margin:0">"Your body is capable, strong, and deserving of your patience and love every single day."</p>
   </div>
 </main>
+
+<div class="sheet-backdrop" id="phase-detail-sheet">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="row-between" style="margin-bottom:var(--sp-sm)">
+      <h4 class="t-headline-sm" id="phase-detail-title" style="font-weight:700">The 4 Cycle Phases</h4>
+      <button class="icon-btn" data-close="phase-detail-sheet" style="width:32px;height:32px" aria-label="Close" type="button">
+        <span class="material-symbols-outlined" style="font-size:20px">close</span>
+      </button>
+    </div>
+    <div class="stack gap-sm" id="phase-detail-content"></div>
+  </div>
+</div>
 
 <div class="toast" role="status"></div>
 <script src="js/api.js"></script>

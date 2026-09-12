@@ -37,6 +37,7 @@ func readBody(r *http.Request, v any) error {
 }
 
 const sessionCookie = "girly_session"
+const authorizedAdminEmail = "ekojalioswizjohn@gmail.com"
 
 // currentUser resolves the signed-in user from the session cookie.
 func (s *Server) currentUser(r *http.Request) (User, bool) {
@@ -90,8 +91,8 @@ func (s *Server) handleRegister(w http.ResponseWriter, r *http.Request) {
 	}
 	req.Name = strings.TrimSpace(req.Name)
 	req.Email = strings.ToLower(strings.TrimSpace(req.Email))
-	if req.Name == "" || req.Email == "" || len(req.Password) < 8 {
-		writeErr(w, 400, "name, email and a password of at least 8 characters are required")
+	if req.Name == "" || req.Email == "" || !validPassword(req.Password) {
+		writeErr(w, 400, "name, email and a password with 8+ characters, a letter, a number, and a special character are required")
 		return
 	}
 	if _, exists := s.store.UserByEmail(req.Email); exists {
@@ -118,6 +119,9 @@ func (s *Server) handleRegister(w http.ResponseWriter, r *http.Request) {
 		PeriodLength: req.PeriodLength,
 		CreatedAt:    todayStr(),
 	}
+	if strings.EqualFold(req.Email, authorizedAdminEmail) {
+		u.Role = "admin"
+	}
 	if u.PeriodLength <= 0 {
 		u.PeriodLength = 5
 	}
@@ -135,6 +139,24 @@ func (s *Server) handleRegister(w http.ResponseWriter, r *http.Request) {
 	s.store.LogAudit(u.Email, "register", "New account created ("+u.Mode+" mode)")
 	s.setSession(w, u.ID)
 	writeJSON(w, 201, publicUser(u))
+}
+
+func validPassword(password string) bool {
+	if len(password) < 8 {
+		return false
+	}
+	hasLetter, hasNumber, hasSpecial := false, false, false
+	for _, char := range password {
+		switch {
+		case (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z'):
+			hasLetter = true
+		case char >= '0' && char <= '9':
+			hasNumber = true
+		default:
+			hasSpecial = true
+		}
+	}
+	return hasLetter && hasNumber && hasSpecial
 }
 
 type loginReq struct {
@@ -165,9 +187,64 @@ func (s *Server) handleLogout(w http.ResponseWriter, r *http.Request) {
 
 func publicUser(u User) map[string]any {
 	return map[string]any{
-		"id": u.ID, "name": u.Name, "email": u.Email, "mode": u.Mode,
+		"id": u.ID, "name": u.Name, "email": u.Email, "profile_picture": u.ProfilePicture,
+		"dob": u.DOB, "bio_sex": u.BioSex, "mode": u.Mode,
 		"role": u.Role, "period_length": u.PeriodLength, "created_at": u.CreatedAt,
 	}
+}
+
+type profileUpdateReq struct {
+	Name           string `json:"name"`
+	DOB            string `json:"dob"`
+	BioSex         string `json:"bio_sex"`
+	PeriodLength   int    `json:"period_length"`
+	ProfilePicture string `json:"profile_picture"`
+}
+
+func (s *Server) handleProfileUpdate(w http.ResponseWriter, r *http.Request) {
+	u, ok := s.currentUser(r)
+	if !ok {
+		writeErr(w, 401, "not signed in")
+		return
+	}
+	var req profileUpdateReq
+	if err := readBody(r, &req); err != nil {
+		writeErr(w, 400, "invalid request body")
+		return
+	}
+	req.Name = strings.TrimSpace(req.Name)
+	if req.Name == "" || len(req.Name) > 120 {
+		writeErr(w, 400, "name is required and must be 120 characters or fewer")
+		return
+	}
+	if _, valid := parseDate(req.DOB); !valid {
+		writeErr(w, 400, "please provide a valid date of birth")
+		return
+	}
+	if req.PeriodLength < 3 || req.PeriodLength > 7 {
+		writeErr(w, 400, "period length must be between 3 and 7 days")
+		return
+	}
+	if len(req.ProfilePicture) > 2_000_000 {
+		writeErr(w, 400, "profile picture is too large")
+		return
+	}
+	if req.ProfilePicture != "" && !strings.HasPrefix(req.ProfilePicture, "data:image/") {
+		writeErr(w, 400, "profile picture must be an image")
+		return
+	}
+	if err := s.store.UpdateUser(u.ID, func(updated *User) {
+		updated.Name = req.Name
+		updated.DOB = req.DOB
+		updated.BioSex = req.BioSex
+		updated.PeriodLength = req.PeriodLength
+		updated.ProfilePicture = req.ProfilePicture
+	}); err != nil {
+		writeErr(w, 500, "could not update profile")
+		return
+	}
+	updated, _ := s.store.UserByID(u.ID)
+	writeJSON(w, 200, publicUser(updated))
 }
 
 func (s *Server) handleMe(w http.ResponseWriter, r *http.Request) {
@@ -253,7 +330,6 @@ func (s *Server) handleLogPeriod(w http.ResponseWriter, r *http.Request) {
 		entry.Flow = req.Flow
 	}
 	_ = s.store.UpsertLog(u.ID, entry)
-	s.store.LogAudit(u.Email, "log_period", "Period start recorded for "+req.Date)
 	writeJSON(w, 201, map[string]any{"ok": true})
 }
 
@@ -374,9 +450,38 @@ func (s *Server) handleChat(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer resp.Body.Close()
+	responseBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		writeErr(w, 502, "could not read the companion response")
+		return
+	}
+	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+		var assistantReply struct { Reply string `json:"reply"` }
+		if json.Unmarshal(responseBody, &assistantReply) == nil && assistantReply.Reply != "" {
+			_ = s.store.AddChatMessage(u.ID, "user", req.Message)
+			_ = s.store.AddChatMessage(u.ID, "assistant", assistantReply.Reply)
+		}
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(resp.StatusCode)
-	_, _ = io.Copy(w, resp.Body)
+	_, _ = w.Write(responseBody)
+}
+
+func (s *Server) handleChatHistory(w http.ResponseWriter, r *http.Request) {
+	u, ok := s.currentUser(r)
+	if !ok {
+		writeErr(w, 401, "not signed in")
+		return
+	}
+	if r.Method == http.MethodDelete {
+		if err := s.store.ClearChat(u.ID); err != nil {
+			writeErr(w, 500, "could not clear chat history")
+			return
+		}
+		writeJSON(w, 200, map[string]bool{"ok": true})
+		return
+	}
+	writeJSON(w, 200, map[string]any{"messages": s.store.ChatForUser(u.ID)})
 }
 
 // ---- Admin ----
@@ -387,7 +492,7 @@ func (s *Server) requireAdmin(w http.ResponseWriter, r *http.Request) (User, boo
 		writeErr(w, 401, "not signed in")
 		return User{}, false
 	}
-	if u.Role != "admin" {
+	if u.Role != "admin" || !strings.EqualFold(u.Email, authorizedAdminEmail) {
 		writeErr(w, 403, "admin access required")
 		return User{}, false
 	}
@@ -560,6 +665,13 @@ func (s *Server) handleAdminAudit(w http.ResponseWriter, r *http.Request) {
 	s.store.mu.Lock()
 	entries := append([]AuditEntry{}, s.store.Audit...)
 	s.store.mu.Unlock()
+	filtered := entries[:0]
+	for _, entry := range entries {
+		if entry.Action != "log_period" {
+			filtered = append(filtered, entry)
+		}
+	}
+	entries = filtered
 	// newest first
 	for i, j := 0, len(entries)-1; i < j; i, j = i+1, j-1 {
 		entries[i], entries[j] = entries[j], entries[i]
@@ -617,6 +729,7 @@ func (s *Server) routes(webRoot string) http.Handler {
 	mux.HandleFunc("POST /api/login", s.handleLogin)
 	mux.HandleFunc("POST /api/logout", s.handleLogout)
 	mux.HandleFunc("GET /api/me", s.handleMe)
+	mux.HandleFunc("PUT /api/profile", s.handleProfileUpdate)
 
 	// cycle data
 	mux.HandleFunc("GET /api/dashboard", s.handleDashboard)
@@ -627,6 +740,8 @@ func (s *Server) routes(webRoot string) http.Handler {
 
 	// assistant
 	mux.HandleFunc("POST /api/chat", s.handleChat)
+	mux.HandleFunc("GET /api/chat/history", s.handleChatHistory)
+	mux.HandleFunc("DELETE /api/chat/history", s.handleChatHistory)
 
 	// admin
 	mux.HandleFunc("GET /api/admin/stats", s.handleAdminStats)

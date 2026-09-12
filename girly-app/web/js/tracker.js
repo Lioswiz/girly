@@ -8,7 +8,7 @@ let state = { data: null, monthOffset: 0, selectedFlow: "" };
 document.addEventListener("DOMContentLoaded", async () => {
   const me = await Girly.requireAuth();
   if (!me) return;
-  Girly.mountChrome({ active: "tracker", name: me.user.name });
+  Girly.mountChrome({ active: "tracker", name: me.user.name, profilePicture: me.user.profile_picture, showAdmin: Girly.isAuthorizedAdmin(me.user) });
 
   buildChips();
   bindSheets();
@@ -95,7 +95,10 @@ function renderCalendar(data) {
   daysEl.innerHTML = data.calendar.map((d) => {
     if (!d.date) return `<button class="cal-day blank" type="button" tabindex="-1"></button>`;
     const classes = ["cal-day"];
-    if (d.kind === "logged_period") classes.push("period");
+    if (d.kind === "logged_period") {
+      classes.push("period");
+      if (d.flow) classes.push(`flow-${d.flow}`);
+    }
     else if (d.kind === "ovulation") classes.push("ovulation");
     else if (d.kind === "fertile") classes.push("fertile");
     else if (d.kind === "predicted") classes.push("predicted");
@@ -107,9 +110,22 @@ function renderCalendar(data) {
     else if (d.kind === "ovulation") sub = `<span class="material-symbols-outlined filled mini-drop">star</span>`;
     else if (d.is_window) sub = `<span class="cal-sub" style="color:var(--primary)">±2d</span>`;
 
-    const label = d.has_log ? ` — logged` : "";
+    const meaning = d.kind === "logged_period"
+      ? `${d.flow ? `${d.flow[0].toUpperCase()}${d.flow.slice(1)} flow` : "Period logged"}`
+      : d.kind === "predicted"
+        ? "Predicted period window"
+        : d.kind === "fertile"
+          ? "Fertile window"
+          : d.kind === "ovulation"
+            ? "Estimated ovulation"
+            : d.is_today
+              ? "Today"
+              : d.has_log
+                ? "Symptom check-in logged"
+                : "Free window";
+    const description = meaning;
     return `<button class="${classes.join(" ")}" type="button" data-date="${d.date}"
-            aria-label="${Girly.fmtDate(d.date)}${label}" title="${Girly.fmtDate(d.date)}${label}">
+            aria-label="${description}" title="${description}" data-tooltip="${description}">
             <span>${d.day}</span>${sub}</button>`;
   }).join("");
 

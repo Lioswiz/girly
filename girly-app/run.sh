@@ -4,7 +4,18 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-PYTHON="${PYTHON:-python3}"
+if [[ -z "${PYTHON:-}" ]]; then
+  if command -v python3 >/dev/null 2>&1; then
+    PYTHON=python3
+  elif command -v python >/dev/null 2>&1; then
+    PYTHON=python
+  elif command -v py >/dev/null 2>&1; then
+    PYTHON=py
+  else
+    echo "❌ Python is not installed. Install Python and retry."
+    exit 1
+  fi
+fi
 
 echo "🌸 Starting Girly…"
 
@@ -26,7 +37,6 @@ fi
 echo ""
 echo "   ➜ App:       http://localhost:8080"
 echo "   ➜ Companion: http://localhost:3000/health"
-echo "   ➜ Demo logins: maya@example.com / password123 · admin@girly.app / admin123"
 echo ""
 echo "Press Ctrl+C to stop both services."
 wait

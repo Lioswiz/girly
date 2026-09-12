@@ -163,6 +163,7 @@ type DayStatus struct {
 	Kind        string `json:"kind"`                  // logged_period|predicted|fertile|ovulation|plain
 	IsToday     bool   `json:"is_today"`
 	HasLog      bool   `json:"has_log"`
+	Flow        string `json:"flow,omitempty"`
 	IsWindow    bool   `json:"is_window"` // inside ±2d prediction window
 }
 
@@ -241,7 +242,7 @@ func BuildCalendar(u User, sum CycleSummary, month time.Time) []DayStatus {
 	for d := 1; d <= daysInMonth; d++ {
 		date := time.Date(month.Year(), month.Month(), d, 0, 0, 0, 0, time.UTC)
 		ds := date.Format(dateLayout)
-		status := DayStatus{Date: ds, Day: d, IsToday: ds == today, HasLog: logsByDate[ds].Date != ""}
+		status := DayStatus{Date: ds, Day: d, IsToday: ds == today, HasLog: logsByDate[ds].Date != "", Flow: logsByDate[ds].Flow}
 
 		switch {
 		case periodDays[ds]:

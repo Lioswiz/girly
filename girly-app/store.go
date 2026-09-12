@@ -23,6 +23,7 @@ type User struct {
 	ID           string     `json:"id"`
 	Name         string     `json:"name"`
 	Email        string     `json:"email"`
+	ProfilePicture string   `json:"profile_picture,omitempty"`
 	PasswordHash string     `json:"password_hash"`
 	Salt         string     `json:"salt"`
 	DOB          string     `json:"dob"`
@@ -48,12 +49,20 @@ type AuditEntry struct {
 	Detail string `json:"detail"`
 }
 
+type ChatMessage struct {
+	UserID    string `json:"user_id"`
+	Role      string `json:"role"`
+	Content   string `json:"content"`
+	CreatedAt string `json:"created_at"`
+}
+
 type Store struct {
 	mu       sync.Mutex
 	path     string
 	Users    []User       `json:"users"`
 	Sessions []Session    `json:"sessions"`
 	Audit    []AuditEntry `json:"audit"`
+	Chat     []ChatMessage `json:"chat,omitempty"`
 	nextID   int
 }
 
@@ -72,7 +81,6 @@ func LoadStore(path string) (*Store, error) {
 		}
 	}
 	if len(s.Users) == 0 {
-		s.seed()
 		if err := s.save(); err != nil {
 			return nil, err
 		}
@@ -150,6 +158,55 @@ func (s *Store) DeleteUser(id string) error {
 		}
 	}
 	s.Sessions = kept
+	chat := s.Chat[:0]
+	for _, message := range s.Chat {
+		if message.UserID != id {
+			chat = append(chat, message)
+		}
+	}
+	s.Chat = chat
+	return s.save()
+}
+
+func (s *Store) AddChatMessage(userID, role, content string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.Chat = append(s.Chat, ChatMessage{UserID: userID, Role: role, Content: content, CreatedAt: time.Now().Format(time.RFC3339)})
+	count := 0
+	for i := len(s.Chat) - 1; i >= 0; i-- {
+		if s.Chat[i].UserID == userID {
+			count++
+			if count > 100 {
+				s.Chat = append(s.Chat[:i], s.Chat[i+1:]...)
+				break
+			}
+		}
+	}
+	return s.save()
+}
+
+func (s *Store) ChatForUser(userID string) []ChatMessage {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	var messages []ChatMessage
+	for _, message := range s.Chat {
+		if message.UserID == userID {
+			messages = append(messages, message)
+		}
+	}
+	return messages
+}
+
+func (s *Store) ClearChat(userID string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	kept := s.Chat[:0]
+	for _, message := range s.Chat {
+		if message.UserID != userID {
+			kept = append(kept, message)
+		}
+	}
+	s.Chat = kept
 	return s.save()
 }
 
@@ -282,57 +339,3 @@ func mergeUnique(a, b []string) []string {
 	return out
 }
 
-// ---- Seed ----
-
-func (s *Store) seed() {
-	now := time.Now()
-	d := func(daysAgo int) string {
-		return now.AddDate(0, 0, -daysAgo).Format("2006-01-02")
-	}
-
-	newUser := func(name, email, password, dob, bioSex, mode, role string, periodLen int, starts []string, logs []DayLog) User {
-		salt := randomToken(16)
-		return User{
-			Name: name, Email: email, Salt: salt,
-			PasswordHash: hashPassword(password, salt),
-			DOB: dob, BioSex: bioSex, Mode: mode, Role: role,
-			PeriodLength: periodLen, PeriodStarts: starts, Logs: logs,
-			CreatedAt: d(30),
-		}
-	}
-
-	maya := newUser("Maya Lin", "maya@example.com", "password123", "2005-04-12", "female", "tracking", "user", 5,
-		[]string{d(80), d(52), d(23)}, // last start 23 days ago → Day 24
-		[]DayLog{
-			{Date: d(1), Moods: []string{"Calm"}, Symptoms: []string{"Tender breasts"}},
-			{Date: d(23), Flow: "medium", Symptoms: []string{"Cramps"}, Moods: []string{"Tired"}},
-			{Date: d(22), Flow: "heavy", Symptoms: []string{"Cramps", "Backache"}},
-			{Date: d(21), Flow: "medium"},
-			{Date: d(20), Flow: "light"},
-			{Date: d(19), Flow: "spotting"},
-		})
-
-	chloe := newUser("Chloe Vance", "chloe.v@example.com", "password123", "2012-08-30", "prefer_not_to_say", "learn", "user", 5,
-		nil, nil)
-
-	sarah := newUser("Sarah Jenkins", "sarah.j@example.com", "password123", "1998-11-02", "female", "tracking", "user", 6,
-		[]string{d(64), d(35), d(6)},
-		[]DayLog{{Date: d(6), Flow: "medium"}, {Date: d(5), Flow: "heavy"}})
-
-	elena := newUser("Elena Rostova", "elena.r@example.com", "password123", "2001-02-17", "female", "tracking", "user", 4,
-		[]string{d(75), d(47), d(19)},
-		[]DayLog{{Date: d(19), Flow: "light"}})
-
-	admin := newUser("Root Ops", "admin@girly.app", "admin123", "1990-01-01", "prefer_not_to_say", "tracking", "admin", 5,
-		nil, nil)
-
-	s.Users = []User{maya, chloe, sarah, elena, admin}
-	for i := range s.Users {
-		s.Users[i].ID = strconv.Itoa(i + 1)
-	}
-	s.nextID = 6
-	s.Audit = []AuditEntry{{
-		Time: now.Format(time.RFC3339), Actor: "system", Action: "seed",
-		Detail: "Demo member directory initialised with 4 accounts + root operator.",
-	}}
-}

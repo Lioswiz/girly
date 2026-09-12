@@ -14,7 +14,7 @@
   document.getElementById("show-signin").addEventListener("click", () => {
     registerForm.classList.add("hidden");
     signinForm.classList.remove("hidden");
-    formTitle.textContent = "Welcome Back to Your Sanctuary";
+    formTitle.textContent = "Welcome Back";
     signinForm.classList.add("fade-in");
   });
   document.getElementById("show-register").addEventListener("click", () => {
@@ -55,6 +55,10 @@
 
   function updateLength(val) {
     lengthValue.textContent = val + " Days";
+    const minDays = Number(slider.min);
+    const maxDays = Number(slider.max);
+    const progress = ((Number(val) - minDays) / (maxDays - minDays)) * 100;
+    slider.style.background = `linear-gradient(to right, var(--primary) 0%, var(--primary) ${progress}%, var(--surface-container-high) ${progress}%, var(--surface-container-high) 100%)`;
     pills.forEach((btn) => {
       const on = btn.getAttribute("data-days") === String(val);
       btn.classList.toggle("pill-blush", on);
@@ -68,6 +72,7 @@
       updateLength(slider.value);
     })
   );
+  updateLength(slider.value);
 
   // ---- register ----
   registerForm.addEventListener("submit", async (e) => {
@@ -78,7 +83,7 @@
     btn.disabled = true;
 
     try {
-      await Girly.api("/api/register", {
+      const res = await Girly.api("/api/register", {
         method: "POST",
         body: JSON.stringify({
           name: document.getElementById("fullName").value.trim(),
@@ -111,9 +116,18 @@
           password: document.getElementById("signin-password").value,
         }),
       });
-      window.location.href = me.user.role === "admin" ? "admin.html" : "tracker.html";
+      window.location.href = Girly.isAuthorizedAdmin(me.user) ? "admin.html" : "tracker.html";
     } catch (err) {
       errEl.textContent = err.message;
     }
+  });
+
+  const signinPasswordInput = document.getElementById("signin-password");
+  const signinEyeIcon = document.getElementById("signin-eye-icon");
+  document.getElementById("toggle-signin-password").addEventListener("click", () => {
+    const show = signinPasswordInput.type === "password";
+    signinPasswordInput.type = show ? "text" : "password";
+    signinEyeIcon.textContent = show ? "visibility_off" : "visibility";
+    document.getElementById("toggle-signin-password").setAttribute("aria-label", show ? "Hide password" : "Show password");
   });
 })();

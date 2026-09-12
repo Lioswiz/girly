@@ -9,14 +9,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   const me = await Girly.requireAuth();
   if (!me) return;
 
-  if (me.user.role !== "admin") {
+  if (!Girly.isAuthorizedAdmin(me.user)) {
     Girly.toast("Admin access required — signing you out", "shield");
     setTimeout(() => (window.location.href = "tracker.html"), 1200);
     return;
   }
 
   document.getElementById("admin-email").textContent = me.user.email;
-  Girly.mountChrome({ active: "admin", name: me.user.name, showLearn: false });
+  Girly.mountChrome({ active: "admin", name: me.user.name, profilePicture: me.user.profile_picture, showLearn: false, showAdmin: true });
 
   document.getElementById("admin-theme").addEventListener("click", () => {
     Girly.toast(Girly.toggleTheme() ? "Dark mode enabled" : "Light mode restored", "dark_mode");
