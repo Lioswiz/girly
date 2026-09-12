@@ -1,0 +1,8 @@
+.git
+.gitignore
+data/girly.json
+assistant/__pycache__/
+*.pyc
+girly-server
+girly-server.exe
+girly-server.exe~

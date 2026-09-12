@@ -13,6 +13,15 @@ cd girly-app
 
 Then open **http://localhost:8080**.
 
+## Deploy on Render
+
+Create a Docker web service from this repository with the root directory set to
+`.` (the repository root). Do not set it to `girly`; that directory does not
+exist in the repository. Render uses the included `Dockerfile` and `render.yaml`.
+
+The service starts both the Go app and Python companion, binds to Render's
+`PORT`, and persists runtime data under `/app/data`.
+
 `run.sh` starts two services:
 
 | Service | Tech | Port | What it does |
