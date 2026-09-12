@@ -3,16 +3,14 @@
 const TIP_ICONS = ["local_cafe", "heat", "water_drop", "self_improvement", "hotel", "bed", "directions_walk", "restaurant"];
 
 let ctxInfo = { name: "there", cycle_day: null, phase_label: "" };
-let stateCycle = null;
 
 document.addEventListener("DOMContentLoaded", async () => {
   const me = await Girly.requireAuth();
   if (!me) return;
-  Girly.mountChrome({ active: "assistant", name: me.user.name, profilePicture: me.user.profile_picture, showAdmin: Girly.isAuthorizedAdmin(me.user) });
+  Girly.mountChrome({ active: "assistant", name: me.user.name });
 
   ctxInfo.name = me.user.name.split(" ")[0];
   const c = me.cycle;
-  stateCycle = c;
   document.getElementById("ctx-label").textContent = c.has_data
     ? `Day ${c.cycle_day} · ${c.phase_label}`
     : `${ctxInfo.name} · ${c.phase_label}`;
@@ -21,13 +19,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     : "Suggested questions";
 
   renderPromptChips();
-  await loadHistory(c);
+  greet(c);
 
   document.getElementById("chat-form").addEventListener("submit", (e) => {
     e.preventDefault();
     sendMessage(document.getElementById("chat-input").value.trim());
   });
-  document.getElementById("clear-chat").addEventListener("click", clearHistory);
 
   // arriving from the Learn page "Ask" bar?
   const prefill = new URLSearchParams(window.location.search).get("q");
@@ -68,34 +65,6 @@ function greet(c) {
   }
   opening += " How are you feeling today?";
   appendBot(`<p class="t-body-md" style="margin:0">${opening}</p>`);
-}
-
-async function loadHistory(c) {
-  const data = await Girly.api("/api/chat/history");
-  const messages = data.messages || [];
-  if (!messages.length) {
-    greet(c);
-    return;
-  }
-  messages.forEach((message) => {
-    if (message.role === "user") {
-      userBubble(message.content);
-    } else {
-      appendBot(`<p class="t-body-md" style="margin:0">${Girly.escapeHtml(message.content)}</p>`, false);
-    }
-  });
-}
-
-async function clearHistory() {
-  if (!confirm("Clear your saved assistant conversation?")) return;
-  try {
-    await Girly.api("/api/chat/history", { method: "DELETE" });
-    document.getElementById("chat-stream").innerHTML = "";
-    greet(stateCycle || { has_data: false });
-    Girly.toast("Conversation cleared", "delete_sweep");
-  } catch (err) {
-    Girly.toast(err.message, "error");
-  }
 }
 
 function userBubble(text) {

@@ -1,0 +1,259 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Maya Lin",
+      "email": "maya@example.com",
+      "password_hash": "cccd1be0057ad17fd1c6ce5f6fad4219a82f71085e7e942a0b8414c6a3a69e23",
+      "salt": "4133d3e86b44750256eb1b689fc05f61",
+      "dob": "2005-04-12",
+      "bio_sex": "female",
+      "mode": "tracking",
+      "role": "user",
+      "period_length": 5,
+      "period_starts": [
+        "2026-06-23",
+        "2026-07-21",
+        "2026-08-19"
+      ],
+      "logs": [
+        {
+          "date": "2026-09-10",
+          "moods": [
+            "Calm"
+          ],
+          "symptoms": [
+            "Tender breasts"
+          ]
+        },
+        {
+          "date": "2026-08-19",
+          "flow": "medium",
+          "moods": [
+            "Tired"
+          ],
+          "symptoms": [
+            "Cramps"
+          ]
+        },
+        {
+          "date": "2026-08-20",
+          "flow": "heavy",
+          "symptoms": [
+            "Cramps",
+            "Backache"
+          ]
+        },
+        {
+          "date": "2026-08-21",
+          "flow": "medium"
+        },
+        {
+          "date": "2026-08-22",
+          "flow": "light"
+        },
+        {
+          "date": "2026-08-23",
+          "flow": "spotting"
+        }
+      ],
+      "created_at": "2026-08-12"
+    },
+    {
+      "id": "2",
+      "name": "Chloe Vance",
+      "email": "chloe.v@example.com",
+      "password_hash": "b6dc0f2681d29589e9ac3e938194579fd2cd835bbe07e68640dfef59daa579a2",
+      "salt": "2f353d25c6f8af1a9ddd918e69992b46",
+      "dob": "2012-08-30",
+      "bio_sex": "prefer_not_to_say",
+      "mode": "learn",
+      "role": "user",
+      "period_length": 5,
+      "period_starts": null,
+      "logs": null,
+      "created_at": "2026-08-12"
+    },
+    {
+      "id": "3",
+      "name": "Sarah Jenkins",
+      "email": "sarah.j@example.com",
+      "password_hash": "357aa5ebe52eee16810fd1bea55af463762751fd7821c0badd02dabfd2247e1a",
+      "salt": "64f9b50f63e05310ffe0e6db4d79eda7",
+      "dob": "1998-11-02",
+      "bio_sex": "female",
+      "mode": "tracking",
+      "role": "user",
+      "period_length": 6,
+      "period_starts": [
+        "2026-07-09",
+        "2026-08-07",
+        "2026-09-05"
+      ],
+      "logs": [
+        {
+          "date": "2026-09-05",
+          "flow": "medium"
+        },
+        {
+          "date": "2026-09-06",
+          "flow": "heavy"
+        }
+      ],
+      "created_at": "2026-08-12"
+    },
+    {
+      "id": "4",
+      "name": "Elena Rostova",
+      "email": "elena.r@example.com",
+      "password_hash": "3284b3645e152bff5490ff8d58e9b9e5a077e7bd3046e039b3cdba9064bf488e",
+      "salt": "6961a1623fb728b55aba72b61eba3733",
+      "dob": "2001-02-17",
+      "bio_sex": "female",
+      "mode": "tracking",
+      "role": "user",
+      "period_length": 4,
+      "period_starts": [
+        "2026-06-28",
+        "2026-07-26",
+        "2026-08-23"
+      ],
+      "logs": [
+        {
+          "date": "2026-08-23",
+          "flow": "light"
+        }
+      ],
+      "created_at": "2026-08-12"
+    },
+    {
+      "id": "5",
+      "name": "Root Ops",
+      "email": "admin@girly.app",
+      "password_hash": "40d5f0bcba4d85ce5f1145f2ea3cd1de76fdaccb9396684baccf260841014f6e",
+      "salt": "fb8b7d6e7f72c2b447e91148ab40d2db",
+      "dob": "1990-01-01",
+      "bio_sex": "prefer_not_to_say",
+      "mode": "tracking",
+      "role": "admin",
+      "period_length": 5,
+      "period_starts": null,
+      "logs": null,
+      "created_at": "2026-08-12"
+    },
+    {
+      "id": "6",
+      "name": "Edache John Ekoja",
+      "email": "ekojalioswizjohn@gmail.com",
+      "password_hash": "d1579ff28ac23143ff6eda4cb721db5aa974f10afddda7e749643bc07bbc523f",
+      "salt": "3d91f406421b652c46542733a0109adc",
+      "dob": "2006-01-02",
+      "bio_sex": "prefer_not_to_say",
+      "mode": "learn",
+      "role": "user",
+      "period_length": 5,
+      "period_starts": null,
+      "logs": null,
+      "created_at": "2026-09-11"
+    },
+    {
+      "id": "7",
+      "name": "Edache John Ekoja",
+      "email": "lioswizjohn@gmail.com",
+      "password_hash": "492d7b641b1ff72cb929f3efedbc2b3c4ae78211c814c09b35cd2b106cadfe4a",
+      "salt": "0c46baf3fe349ddb1eb9d69e30469c3e",
+      "dob": "2006-01-02",
+      "bio_sex": "prefer_not_to_say",
+      "mode": "tracking",
+      "role": "user",
+      "period_length": 5,
+      "period_starts": [
+        "2026-09-11"
+      ],
+      "logs": [
+        {
+          "date": "2026-09-11",
+          "moods": [
+            "Happy"
+          ],
+          "symptoms": [
+            "Acne",
+            "Cramps"
+          ]
+        }
+      ],
+      "created_at": "2026-09-11"
+    }
+  ],
+  "sessions": [
+    {
+      "token": "ec6903bfa59b1586d07e59c64806976a40d528fa5f0dd55a",
+      "user_id": "1",
+      "created_at": "2026-09-11"
+    },
+    {
+      "token": "7895d1b8f02279bc3bbb950ca0523de2dc9b52f96d2c52ef",
+      "user_id": "6",
+      "created_at": "2026-09-11"
+    },
+    {
+      "token": "9110d908964b450a970dac8746eea11614b6d18f15935f6e",
+      "user_id": "6",
+      "created_at": "2026-09-11"
+    },
+    {
+      "token": "c75ead65c7ffc76fcbac6a562497448c78b9f27be0f49e40",
+      "user_id": "6",
+      "created_at": "2026-09-11"
+    },
+    {
+      "token": "dfc6235ddd8e430d68fd004d49660eb7560b3c805f7b73f1",
+      "user_id": "7",
+      "created_at": "2026-09-11"
+    }
+  ],
+  "audit": [
+    {
+      "time": "2026-09-11T16:33:10+01:00",
+      "actor": "system",
+      "action": "seed",
+      "detail": "Demo member directory initialised with 4 accounts + root operator."
+    },
+    {
+      "time": "2026-09-11T16:33:11+01:00",
+      "actor": "maya@example.com",
+      "action": "login",
+      "detail": "Session opened"
+    },
+    {
+      "time": "2026-09-11T16:43:43+01:00",
+      "actor": "ekojalioswizjohn@gmail.com",
+      "action": "register",
+      "detail": "New account created (learn mode)"
+    },
+    {
+      "time": "2026-09-11T16:44:28+01:00",
+      "actor": "ekojalioswizjohn@gmail.com",
+      "action": "login",
+      "detail": "Session opened"
+    },
+    {
+      "time": "2026-09-11T16:45:30+01:00",
+      "actor": "ekojalioswizjohn@gmail.com",
+      "action": "login",
+      "detail": "Session opened"
+    },
+    {
+      "time": "2026-09-11T16:46:08+01:00",
+      "actor": "lioswizjohn@gmail.com",
+      "action": "register",
+      "detail": "New account created (learn mode)"
+    },
+    {
+      "time": "2026-09-11T17:16:52+01:00",
+      "actor": "lioswizjohn@gmail.com",
+      "action": "mode_switch",
+      "detail": "Switched to tracking mode"
+    }
+  ]
+}

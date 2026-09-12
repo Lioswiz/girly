@@ -11,7 +11,7 @@ A full-stack implementation of the Stitch design export
 | AI service | **Python** (stdlib only, `:3000`) | "Girly companion" chat assistant — knowledge-base replies with cycle-day context, plus `/health` for the admin system-health panel |
 | Frontend | **HTML + CSS + JS** (vanilla, no frameworks) | 5 pages: register/sign-in, tracker dashboard, learn mode, AI assistant, admin console — hand-written CSS from the DESIGN.md token system, with dark mode |
 
-Data lives in `data/girly.json` and is created automatically on first run.
+Data lives in `data/girly.json` (auto-created & seeded with demo accounts on first run).
 
 ## Status legend
 - [ ] not started · [~] in progress · [x] done · [!] blocked
@@ -24,7 +24,7 @@ Data lives in `data/girly.json` and is created automatically on first run.
 - [x] Project layout (`go.mod`, `run.sh`, `data/`)
 
 ### Go backend
-- [x] `store.go` — JSON persistence + models
+- [x] `store.go` — JSON persistence + models + demo seed data
 - [x] `auth.go` — PBKDF2 password hashing, session tokens, cookies
 - [x] `cycle.go` — cycle-day / phase / next-period / fertile-window prediction math
 - [x] `handlers.go` — REST endpoints (auth, logs, predictions, admin, chat proxy)

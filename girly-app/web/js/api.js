@@ -1,10 +1,6 @@
 /* Girly 🌸 — shared client helpers: API, session guard, theme, toast */
 
 const Girly = {
-  isAuthorizedAdmin(user) {
-    return user?.role === "admin" && user.email?.toLowerCase() === "ekojalioswizjohn@gmail.com";
-  },
-
   /* ---- API ---- */
   async api(path, opts = {}) {
     const res = await fetch(path, {
@@ -83,14 +79,14 @@ const Girly = {
   },
 
   /* ---- Shared chrome (header + bottom nav) ---- */
-  mountChrome({ active, name = "", profilePicture = "", showLearn = true, showAdmin = false }) {
+  mountChrome({ active, name = "", showLearn = true }) {
     // header
     const header = document.createElement("header");
     header.className = "app-header";
     header.innerHTML = `
       <div class="app-header-inner">
         <a class="brand" href="tracker.html">
-          <img class="brand-logo" src="assets/favicon.svg" alt="Girly logo"/>
+          <img class="brand-logo" src="assets/logo.svg" alt="Girly logo"/>
           <span class="brand-name">Girly</span><span aria-hidden="true" style="font-size:12px">💜</span>
         </a>
         <div class="header-actions">
@@ -99,12 +95,9 @@ const Girly = {
           <button class="icon-btn" id="theme-btn" aria-label="Toggle appearance theme" type="button">
             <span class="material-symbols-outlined" style="font-size:20px">routine</span>
           </button>
-          <button class="icon-btn" id="logout-btn" aria-label="Log out" title="Log out" type="button">
-            <span class="material-symbols-outlined" style="font-size:20px">logout</span>
+          <button class="icon-btn" id="profile-btn" aria-label="View profile menu" type="button" style="width:auto;height:auto;padding:2px">
+            <span class="avatar">${this.escapeHtml(this.initials(name || "G"))}</span>
           </button>
-          <a class="avatar" href="profile.html" aria-label="Open profile" title="Open profile">${profilePicture
-            ? `<img src="${this.escapeHtml(profilePicture)}" alt="Profile picture" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/>`
-            : this.escapeHtml(this.initials(name || "G"))}</a>
         </div>
       </div>`;
     document.body.prepend(header);
@@ -116,7 +109,7 @@ const Girly = {
       { id: "tracker", icon: "calendar_today", label: "Tracker", href: "tracker.html" },
       { id: "learn", icon: "school", label: "Learn", href: "learn.html" },
       { id: "assistant", icon: "auto_awesome", label: "Assistant", href: "assistant.html" },
-      ...(showAdmin ? [{ id: "admin", icon: "shield_person", label: "Admin", href: "admin.html" }] : []),
+      { id: "admin", icon: "shield_person", label: "Admin", href: "admin.html" },
     ];
     nav.innerHTML = `<div class="bottom-nav-inner">${items.map((it) => `
       <a class="nav-item ${it.id === active ? "active" : ""}" href="${it.href}" aria-current="${it.id === active ? "page" : "false"}">
@@ -130,13 +123,12 @@ const Girly = {
       this.toast(dark ? "Night mode enabled 💜" : "Light mode restored", dark ? "dark_mode" : "light_mode");
     });
 
-    // sign out controls
-    const signOut = async () => {
+    // profile menu (sign out)
+    header.querySelector("#profile-btn").addEventListener("click", async () => {
       if (!confirm("Sign out of Girly?")) return;
       await this.api("/api/logout", { method: "POST" });
       window.location.href = "index.html";
-    };
-    header.querySelector("#logout-btn").addEventListener("click", signOut);
+    });
 
     this.applyTheme();
   },
