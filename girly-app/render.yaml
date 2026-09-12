@@ -3,7 +3,7 @@ services:
     name: girly
     runtime: docker
     plan: free
-    rootDir: .
+    rootDir: girly-app
     dockerfilePath: Dockerfile
     dockerContext: .
     healthCheckPath: /
