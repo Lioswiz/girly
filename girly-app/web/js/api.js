@@ -62,6 +62,15 @@ const Girly = {
   },
 
   /* ---- Helpers ---- */
+  /* Passwords must combine letters, numbers, and special characters.
+     Returns an error message, or "" when the password passes. */
+  passwordError(pw) {
+    if (!/[A-Za-z]/.test(pw)) return "Include at least one letter.";
+    if (!/\d/.test(pw)) return "Include at least one number.";
+    if (!/[^A-Za-z0-9]/.test(pw)) return "Include at least one special character (e.g. ! @ # $).";
+    return "";
+  },
+
   escapeHtml(str) {
     return String(str ?? "").replace(/[&<>'"]/g, (c) => ({
       "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;",
@@ -79,10 +88,13 @@ const Girly = {
   },
 
   /* ---- Shared chrome (header + bottom nav) ---- */
-  mountChrome({ active, name = "", showLearn = true }) {
+  mountChrome({ active, name = "", avatar = "", showLearn = true }) {
     // header
     const header = document.createElement("header");
     header.className = "app-header";
+    const avatarContent = avatar
+      ? `<img src="${avatar}" alt="Your profile picture"/>`
+      : this.escapeHtml(this.initials(name || "G"));
     header.innerHTML = `
       <div class="app-header-inner">
         <a class="brand" href="tracker.html">
@@ -95,8 +107,11 @@ const Girly = {
           <button class="icon-btn" id="theme-btn" aria-label="Toggle appearance theme" type="button">
             <span class="material-symbols-outlined" style="font-size:20px">routine</span>
           </button>
-          <button class="icon-btn" id="profile-btn" aria-label="View profile menu" type="button" style="width:auto;height:auto;padding:2px">
-            <span class="avatar">${this.escapeHtml(this.initials(name || "G"))}</span>
+          <button class="icon-btn" id="logout-btn" aria-label="Sign out of Girly" title="Sign out" type="button">
+            <span class="material-symbols-outlined" style="font-size:20px">logout</span>
+          </button>
+          <button class="icon-btn" id="profile-btn" aria-label="Open your profile" title="Your profile" type="button" style="width:auto;height:auto;padding:2px">
+            <span class="avatar">${avatarContent}</span>
           </button>
         </div>
       </div>`;
@@ -106,6 +121,7 @@ const Girly = {
     const nav = document.createElement("nav");
     nav.className = "bottom-nav";
     const items = [
+      { id: "profile", icon: "person", label: "Profile", href: "profile.html" },
       { id: "tracker", icon: "calendar_today", label: "Tracker", href: "tracker.html" },
       { id: "learn", icon: "school", label: "Learn", href: "learn.html" },
       { id: "assistant", icon: "auto_awesome", label: "Assistant", href: "assistant.html" },
@@ -123,8 +139,13 @@ const Girly = {
       this.toast(dark ? "Night mode enabled 💜" : "Light mode restored", dark ? "dark_mode" : "light_mode");
     });
 
-    // profile menu (sign out)
-    header.querySelector("#profile-btn").addEventListener("click", async () => {
+    // profile button → profile page
+    header.querySelector("#profile-btn").addEventListener("click", () => {
+      window.location.href = "profile.html";
+    });
+
+    // sign out (top right, on every page)
+    header.querySelector("#logout-btn").addEventListener("click", async () => {
       if (!confirm("Sign out of Girly?")) return;
       await this.api("/api/logout", { method: "POST" });
       window.location.href = "index.html";

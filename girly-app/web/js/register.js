@@ -25,13 +25,17 @@
   });
 
   // ---- password visibility ----
-  const passwordInput = document.getElementById("password");
-  const eyeIcon = document.getElementById("eye-icon");
-  document.getElementById("toggle-password").addEventListener("click", () => {
-    const show = passwordInput.type === "password";
-    passwordInput.type = show ? "text" : "password";
-    eyeIcon.textContent = show ? "visibility_off" : "visibility";
-  });
+  function bindPasswordToggle(inputId, toggleId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    document.getElementById(toggleId).addEventListener("click", () => {
+      const show = input.type === "password";
+      input.type = show ? "text" : "password";
+      icon.textContent = show ? "visibility_off" : "visibility";
+    });
+  }
+  bindPasswordToggle("password", "toggle-password", "eye-icon");
+  bindPasswordToggle("signin-password", "toggle-signin-password", "signin-eye-icon");
 
   // ---- period started? expand sub-questions ----
   const subContainer = document.getElementById("cycle-questions");
@@ -78,12 +82,24 @@
     btn.disabled = true;
 
     try {
-      await Girly.api("/api/register", {
+      const password = document.getElementById("password").value;
+      if (password.length < 8) {
+        errEl.textContent = "Your password must be at least 8 characters.";
+        btn.disabled = false;
+        return;
+      }
+      const policyErr = Girly.passwordError(password);
+      if (policyErr) {
+        errEl.textContent = policyErr;
+        btn.disabled = false;
+        return;
+      }
+      const res = await Girly.api("/api/register", {
         method: "POST",
         body: JSON.stringify({
           name: document.getElementById("fullName").value.trim(),
           email: document.getElementById("email").value.trim(),
-          password: passwordInput.value,
+          password: password,
           dob: document.getElementById("dob").value,
           bio_sex: document.querySelector('input[name="bio_sex"]:checked').value,
           period_status: document.querySelector('input[name="period_status"]:checked').value,
@@ -111,7 +127,7 @@
           password: document.getElementById("signin-password").value,
         }),
       });
-      window.location.href = me.user.role === "admin" ? "admin.html" : "tracker.html";
+      window.location.href = me.role === "admin" ? "admin.html" : "tracker.html";
     } catch (err) {
       errEl.textContent = err.message;
     }

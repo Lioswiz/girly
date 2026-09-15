@@ -1,34 +1,47 @@
 # Girly 🌸 — Menstrual Cycle Tracker
 
 A private, reassuring cycle companion built from the Stitch design export
-(`../stitch_girly_menstrual_cycle_tracker/`) with **Go, Python, JavaScript,
-CSS and HTML** — no frameworks, no external dependencies.
+(`../stitch_girly_menstrual_cycle_tracker/`) with **Python, JavaScript, CSS
+and HTML** — no frameworks, no external dependencies (standard library only).
 
 ## Quick start
 
 ```bash
 cd girly-app
-./run.sh
+python3 server.py
 ```
 
 Then open **http://localhost:8080**.
 
-## Deploy on Render
+The single `server.py` process runs everything: it serves the frontend and
+REST API on port 8080 and starts the companion service
+(`assistant/server.py`) in a background thread on port 3000.
 
-Create a Blueprint from this repository using `girly-app/render.yaml`. The
-service root directory is `girly-app`, which contains `go.mod`, `Dockerfile`,
-and the application source. Do not set the root directory to `girly`; that
-directory does not exist in the repository.
+## The companion (assistant)
 
-The service starts both the Go app and Python companion, binds to Render's
-`PORT`, and persists runtime data under `/app/data`.
+The chat answers questions across three areas, all offline by default:
 
-`run.sh` starts two services:
+- **Menstrual health** — cycle basics, first periods, cramps, PMS/PMDD, PCOS,
+  endometriosis, discharge, infections, pregnancy & contraception, TSS, …
+- **General health** — sleep, stress, nutrition, hydration, weight, skin,
+  puberty, fever, supplements, …
+- **Personal hygiene** — showering, intimate care, body odour, shaving, hair,
+  dental, feet, nails, handwashing, …
 
-| Service | Tech | Port | What it does |
-|---|---|---|---|
-| App server | Go (stdlib) | 8080 | Serves the frontend, REST API, auth & sessions, cycle predictions, admin endpoints |
-| Companion | Python (stdlib) | 3000 | The in-app AI assistant: cycle-aware knowledge-base chat + health probe |
+Plain greetings ("hi", "hello") get a simple hello back — no extra info
+attached. Questions the knowledge base doesn't recognise fall through to an
+optional AI layer:
+
+```bash
+export GIRLY_AI_API_KEY=sk-...   # or ANTHROPIC_API_KEY
+python3 server.py                # unmatched questions now go to the AI
+```
+
+Without a key the companion stays fully offline and answers from the built-in
+topics only. With a key, the user's question and minimal cycle context (day
+and phase — never names or logs) are sent to the AI service. `GIRLY_AI_MODEL`
+(default `claude-sonnet-5`) and `GIRLY_AI_API_URL` can override the model and
+endpoint.
 
 ## Demo accounts
 
@@ -42,25 +55,28 @@ The service starts both the Go app and Python companion, binds to Render's
 
 ```
 girly-app/
-├── main.go              # entrypoint: routing + static serving
-├── store.go             # JSON persistence, models, demo seed
-├── auth.go              # PBKDF2-SHA256 password hashing, session tokens
-├── handlers.go          # REST API (auth, logs, predictions, admin, chat proxy)
-├── cycle.go             # cycle-day / phase / fertile-window prediction math
+├── server.py             # entrypoint: routing + static serving + companion thread
+├── store.py              # JSON persistence, models, demo seed
+├── auth.py               # PBKDF2-SHA256 password hashing, session tokens
+├── handlers.py           # REST API (auth, logs, predictions, admin, chat proxy)
+├── cycle.py              # cycle-day / phase / fertile-window prediction math
+├── mailer.py             # optional SMTP for admin password resets
+├── test_cycle.py         # prediction & store tests (python -m unittest)
+├── test_assistant.py     # companion knowledge base & AI-layer tests
 ├── assistant/
-│   └── server.py        # Python companion (chat knowledge base + /health)
+│   └── server.py         # Python companion (knowledge base, optional AI layer, /health)
 ├── web/
-│   ├── index.html       # registration & onboarding + sign-in
-│   ├── tracker.html     # cycle ring, stats, phase calendar, quick-log sheets
-│   ├── learn.html       # education modules, first-period prep, ask bar
-│   ├── assistant.html   # chat with the companion
-│   ├── admin.html       # stats bento, system health, member directory, audit
-│   ├── css/girly.css    # design system (tokens, pills, cards, dark mode)
-│   ├── js/*.js          # vanilla JS per page + shared helpers
+│   ├── index.html        # registration & onboarding + sign-in
+│   ├── tracker.html      # cycle ring, stats, phase calendar, quick-log sheets
+│   ├── learn.html        # education modules, first-period prep, ask bar
+│   ├── assistant.html    # chat with the companion
+│   ├── profile.html      # profile picture, change password, sign out
+│   ├── admin.html        # stats bento, system health, member directory, audit
+│   ├── css/girly.css     # design system (tokens, pills, cards, dark mode)
+│   ├── js/*.js           # vanilla JS per page + shared helpers
 │   └── assets/logo.svg
-├── data/girly.json      # created & seeded automatically on first run
-├── run.sh               # starts Python + Go together
-└── PROGRESS.md          # build progress tracker
+├── data/girly.json       # created & seeded automatically on first run
+└── PROGRESS.md           # build progress tracker
 ```
 
 ## How predictions work

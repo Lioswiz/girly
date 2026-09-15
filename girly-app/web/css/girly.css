@@ -203,8 +203,9 @@ input, select {
 .gap-md { gap: var(--sp-md); }
 .gap-lg { gap: var(--sp-lg); }
 
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-sm); }
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-xs); }
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--sp-sm); }
+/* Stat cards keep side-by-side on phones but wrap on very narrow screens. */
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: var(--sp-xs); }
 
 .row { display: flex; align-items: center; }
 .row-between { display: flex; align-items: center; justify-content: space-between; }
@@ -931,4 +932,80 @@ input[type="range"]::-webkit-slider-thumb {
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ---- Profile page ---- */
+.avatar img {
+  width: 100%; height: 100%;
+  border-radius: var(--r-full);
+  object-fit: cover;
+  display: block;
+}
+.profile-avatar {
+  position: relative;
+  width: 112px; height: 112px;
+  border-radius: var(--r-full);
+  background: var(--primary-fixed);
+  color: var(--on-primary-fixed);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 15%, transparent);
+  user-select: none;
+}
+.profile-avatar img {
+  width: 100%; height: 100%;
+  border-radius: var(--r-full);
+  object-fit: cover;
+}
+.avatar-edit {
+  position: absolute; right: -4px; bottom: -4px;
+  width: 36px; height: 36px;
+  border-radius: var(--r-full);
+  background: var(--primary);
+  color: var(--on-primary);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 40%, transparent);
+}
+
+/* ---- Chat attachments ---- */
+.attachment-tray { display: flex; flex-wrap: wrap; gap: 6px; }
+.attachment-tray:empty { display: none; }
+.attach-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  max-width: 100%;
+  padding: 4px 6px 4px 10px;
+  border-radius: var(--r-full);
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+}
+.attach-chip .attach-name {
+  font-size: 12px; font-weight: 600;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 160px;
+}
+.attach-thumb {
+  display: block;
+  width: 140px; height: 140px;
+  border-radius: var(--r-sm);
+  object-fit: cover;
+}
+.attach-file {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--r-full);
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  color: var(--primary);
+  font-size: 13px; font-weight: 600;
+  text-decoration: none;
+}
+.attach-file:hover { background: color-mix(in srgb, var(--primary) 20%, transparent); }
+
+/* ---- Small-screen fit --------------------------------------------------- */
+/* Long words / filenames inside chat bubbles must wrap, never overflow. */
+.bubble, .attach-file, .attach-chip .attach-name { overflow-wrap: anywhere; }
+
+/* Very narrow phones: keep all five nav labels readable. */
+@media (max-width: 380px) {
+  .nav-item { font-size: 10px; gap: 1px; min-height: 44px; }
+  .nav-item .material-symbols-outlined { font-size: 20px; }
 }

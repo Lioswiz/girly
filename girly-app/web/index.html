@@ -58,7 +58,7 @@
         <label for="password">Create Password</label>
         <div class="field-input-wrap">
           <span class="material-symbols-outlined">lock</span>
-          <input class="input with-icon" id="password" name="password" placeholder="Minimum 8 characters" required minlength="8" type="password" style="padding-right:2.75rem"/>
+          <input class="input with-icon" id="password" name="password" placeholder="Min 8 chars · letters, numbers & symbols" required minlength="8" type="password" style="padding-right:2.75rem"/>
           <button class="icon-btn" id="toggle-password" type="button" aria-label="Toggle password visibility" style="position:absolute; right:4px; width:36px; height:36px">
             <span class="material-symbols-outlined" id="eye-icon" style="font-size:20px">visibility</span>
           </button>
@@ -211,7 +211,10 @@
         <label for="signin-password">Password</label>
         <div class="field-input-wrap">
           <span class="material-symbols-outlined">lock</span>
-          <input class="input with-icon" id="signin-password" required type="password" placeholder="Your password"/>
+          <input class="input with-icon" id="signin-password" required type="password" placeholder="Your password" style="padding-right:2.75rem"/>
+          <button class="icon-btn" id="toggle-signin-password" type="button" aria-label="Toggle password visibility" style="position:absolute; right:4px; width:36px; height:36px">
+            <span class="material-symbols-outlined" id="signin-eye-icon" style="font-size:20px">visibility</span>
+          </button>
         </div>
       </div>
       <p class="t-body-sm" id="signin-error" style="color:var(--error); margin:0"></p>
@@ -224,10 +227,6 @@
         <button type="button" class="t-label-sm" id="show-register" style="color:var(--primary); font-weight:700; background:none; cursor:pointer; text-decoration:underline">Create an account</button>
       </div>
     </section>
-    <p class="notice">
-      <span class="material-symbols-outlined" style="font-size:14px">info</span>
-      Demo accounts: maya@example.com · password123 — admin@girly.app · admin123
-    </p>
   </form>
 </main>
 

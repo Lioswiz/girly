@@ -7,16 +7,35 @@ let ctxInfo = { name: "there", cycle_day: null, phase_label: "" };
 document.addEventListener("DOMContentLoaded", async () => {
   const me = await Girly.requireAuth();
   if (!me) return;
-  Girly.mountChrome({ active: "assistant", name: me.user.name });
+  Girly.mountChrome({ active: "assistant", name: me.user.name, avatar: me.user.avatar });
 
   ctxInfo.name = me.user.name.split(" ")[0];
   const c = me.cycle;
-  document.getElementById("ctx-label").textContent = c.has_data
-    ? `Day ${c.cycle_day} · ${c.phase_label}`
-    : `${ctxInfo.name} · ${c.phase_label}`;
   document.getElementById("suggest-label").textContent = c.has_data
     ? `Suggested questions for Day ${c.cycle_day}`
     : "Suggested questions";
+
+  // suggested questions live behind a toggle button that opens a sheet
+  const suggestToggle = document.getElementById("suggest-toggle");
+  const backdrop = document.getElementById("suggest-backdrop");
+  const caret = document.getElementById("suggest-caret");
+
+  const closeSuggestSheet = () => {
+    backdrop.classList.remove("open");
+    suggestToggle.setAttribute("aria-expanded", "false");
+    caret.textContent = "expand_more";
+  };
+
+  suggestToggle.addEventListener("click", () => {
+    const opening = !backdrop.classList.contains("open");
+    backdrop.classList.toggle("open", opening);
+    suggestToggle.setAttribute("aria-expanded", String(opening));
+    caret.textContent = opening ? "expand_less" : "expand_more";
+  });
+  document.getElementById("suggest-close").addEventListener("click", closeSuggestSheet);
+  backdrop.addEventListener("click", (e) => {
+    if (e.target === backdrop) closeSuggestSheet();
+  });
 
   renderPromptChips();
   greet(c);
@@ -26,10 +45,99 @@ document.addEventListener("DOMContentLoaded", async () => {
     sendMessage(document.getElementById("chat-input").value.trim());
   });
 
+  // ---- attachments (photos & documents) ----
+  const attachInput = document.getElementById("attachment-input");
+  document.getElementById("btn-attach").addEventListener("click", () => {
+    attachInput.value = "";
+    attachInput.click();
+  });
+  attachInput.addEventListener("change", uploadSelectedFiles);
+
   // arriving from the Learn page "Ask" bar?
   const prefill = new URLSearchParams(window.location.search).get("q");
   if (prefill) sendMessage(prefill);
 });
+
+// ---- attachments ----
+let pendingAttachments = [];
+
+const ATTACH_EXT_TYPES = {
+  ".txt": "text/plain",
+  ".md": "text/markdown",
+  ".pdf": "application/pdf",
+  ".doc": "application/msword",
+  ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+};
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(",")[1]);
+    reader.onerror = () => reject(new Error("could not read that file"));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function uploadSelectedFiles() {
+  const input = document.getElementById("attachment-input");
+  const files = [...(input.files || [])];
+  for (const file of files) {
+    if (file.size > 4 * 1024 * 1024) {
+      Girly.toast(`${file.name} is larger than 4 MB`, "error");
+      continue;
+    }
+    const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
+    const contentType = file.type || ATTACH_EXT_TYPES[ext] || "";
+    try {
+      const data = await fileToBase64(file);
+      const res = await Girly.api("/api/attachments", {
+        method: "POST",
+        body: JSON.stringify({ name: file.name, content_type: contentType, data }),
+      });
+      pendingAttachments.push(res.attachment);
+    } catch (e) {
+      Girly.toast(e.message, "error");
+    }
+  }
+  renderAttachmentTray();
+}
+
+function renderAttachmentTray() {
+  const tray = document.getElementById("attachment-tray");
+  tray.innerHTML = pendingAttachments
+    .map(
+      (a, i) => `
+    <div class="attach-chip">
+      <span class="material-symbols-outlined" style="font-size:16px">${a.type.startsWith("image/") ? "image" : "description"}</span>
+      <span class="attach-name">${Girly.escapeHtml(a.name)}</span>
+      <button class="icon-btn" data-remove="${i}" type="button" style="width:24px;height:24px" aria-label="Remove attachment">
+        <span class="material-symbols-outlined" style="font-size:16px">close</span>
+      </button>
+    </div>`
+    )
+    .join("");
+  tray.querySelectorAll("[data-remove]").forEach((btn) =>
+    btn.addEventListener("click", () => {
+      pendingAttachments.splice(Number(btn.dataset.remove), 1);
+      renderAttachmentTray();
+    })
+  );
+}
+
+function attachmentHTML(attachments) {
+  if (!attachments || !attachments.length) return "";
+  const items = attachments
+    .map((a) =>
+      a.type && a.type.startsWith("image/")
+        ? `<a href="${a.url}" target="_blank" rel="noopener"><img class="attach-thumb" src="${a.url}" alt="${Girly.escapeHtml(a.name)}"/></a>`
+        : `<a class="attach-file" href="${a.url}" target="_blank" rel="noopener">
+             <span class="material-symbols-outlined" style="font-size:18px">description</span>
+             <span>${Girly.escapeHtml(a.name)}</span>
+           </a>`
+    )
+    .join("");
+  return `<div class="stack" style="gap:6px; margin-bottom:4px">${items}</div>`;
+}
 
 function renderPromptChips() {
   const chips = [
@@ -45,7 +153,13 @@ function renderPromptChips() {
       `<button class="prompt-chip" type="button"><span>${emoji}</span><span>${text}</span></button>`
     ).join("");
   document.querySelectorAll(".prompt-chip").forEach((btn) =>
-    btn.addEventListener("click", () => sendMessage(btn.textContent.trim()))
+    btn.addEventListener("click", () => {
+      // close the sheet, then send just the question text
+      document.getElementById("suggest-backdrop").classList.remove("open");
+      document.getElementById("suggest-toggle").setAttribute("aria-expanded", "false");
+      document.getElementById("suggest-caret").textContent = "expand_more";
+      sendMessage(btn.lastElementChild.textContent.trim());
+    })
   );
 }
 
@@ -67,12 +181,15 @@ function greet(c) {
   appendBot(`<p class="t-body-md" style="margin:0">${opening}</p>`);
 }
 
-function userBubble(text) {
+function userBubble(text, attachments) {
   const row = document.createElement("div");
   row.className = "bubble-row user fade-in";
   row.innerHTML = `
     <div class="bubble-col user">
-      <div class="bubble user-bubble"><p class="t-body-md" style="margin:0">${Girly.escapeHtml(text)}</p></div>
+      <div class="bubble user-bubble">
+        ${attachmentHTML(attachments)}
+        ${text ? `<p class="t-body-md" style="margin:0">${Girly.escapeHtml(text)}</p>` : ""}
+      </div>
       <span class="bubble-time">${nowTime()}</span>
     </div>`;
   document.getElementById("chat-stream").appendChild(row);
@@ -114,15 +231,21 @@ function thinkingBubble() {
 
 async function sendMessage(query) {
   const input = document.getElementById("chat-input");
-  if (!query) return;
+  const attachments = pendingAttachments.splice(0);
+  renderAttachmentTray();
+  if (!query && !attachments.length) return;
+  const message = query || "Sent an attachment";
   input.value = "";
-  userBubble(query);
+  userBubble(query, attachments);
   thinkingBubble();
 
   try {
     const res = await Girly.api("/api/chat", {
       method: "POST",
-      body: JSON.stringify({ message: query }),
+      body: JSON.stringify({
+        message,
+        attachments: attachments.map(({ name, url, type }) => ({ name, url, type })),
+      }),
     });
     document.getElementById("bot-thinking")?.remove();
 
